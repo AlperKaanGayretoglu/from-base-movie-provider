@@ -1,6 +1,7 @@
 package com.alpergayretoglu.movie_provider.controller;
 
 import com.alpergayretoglu.movie_provider.exception.BusinessException;
+import com.alpergayretoglu.movie_provider.exception.EntityNotFoundException;
 import com.alpergayretoglu.movie_provider.exception.ErrorCode;
 import com.alpergayretoglu.movie_provider.exception.ErrorDTO;
 import com.alpergayretoglu.movie_provider.util.DateUtil;
@@ -52,8 +53,8 @@ public class GlobalControllerAdvice extends ResponseEntityExceptionHandler {
 
         ErrorDTO error = ErrorDTO.builder()
                 .timestamp(DateUtil.now())
-                .status(ErrorCode.validation.getHttpCode())
-                .error(ErrorCode.validation.name())
+                .status(ErrorCode.VALIDATION.getHttpCode())
+                .error(ErrorCode.VALIDATION.name())
                 .message(String.join(", ", errors))
                 .build();
         return new ResponseEntity<>(error, headers, status);
@@ -67,8 +68,8 @@ public class GlobalControllerAdvice extends ResponseEntityExceptionHandler {
 
         ErrorDTO error = ErrorDTO.builder()
                 .timestamp(DateUtil.now())
-                .status(ErrorCode.validation.getHttpCode())
-                .error(ErrorCode.validation.name())
+                .status(ErrorCode.VALIDATION.getHttpCode())
+                .error(ErrorCode.VALIDATION.name())
                 .message(String.join(", ", errors))
                 .build();
         return new ResponseEntity<>(error, HttpStatus.resolve(error.getStatus()));
@@ -81,9 +82,31 @@ public class GlobalControllerAdvice extends ResponseEntityExceptionHandler {
         ErrorDTO error = ErrorDTO.builder()
                 .timestamp(DateUtil.now())
                 .status(status.value())
-                .error(ErrorCode.unknown.name())
+                .error(ErrorCode.UNKNOWN.name())
                 .message(ex.getRequestPartName() + " is missing!")
                 .build();
         return new ResponseEntity<>(error, headers, status);
     }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<Object> handleException(EntityNotFoundException e) {
+        return new ResponseEntity<>(e.getMessage(), e.getStatusCode());
+    }
+
+    /* TODO: These do not work properly, fix them or remove them
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<Object> handleException(BadRequestException e) {
+        return new ResponseEntity<>(e.getMessage(), e.getStatusCode());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Object> handleException(MethodArgumentNotValidException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleException(Exception e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+     */
 }

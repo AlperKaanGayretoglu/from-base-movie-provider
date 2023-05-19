@@ -36,7 +36,7 @@ public class AuthenticationService {
 
     public void register(RegisterRequest registerRequest) {
         if (userRepository.existsByEmail(registerRequest.getEmail())) {
-            throw new BusinessException(ErrorCode.account_already_exists, "Account already exists");
+            throw new BusinessException(ErrorCode.ACCOUNT_ALREADY_EXISTS, "Account already exists");
         }
 
         String verificationCode = RandomStringUtils.randomAlphanumeric(24);
@@ -55,10 +55,10 @@ public class AuthenticationService {
 
     public LoginResponse login(LoginRequest loginRequest) {
         User user = userRepository.findByEmail(loginRequest.getEmail())
-                .orElseThrow(() -> new BusinessException(ErrorCode.account_missing, "User not found"));
+                .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_MISSING, "User not found"));
 
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPasswordHash())) {
-            throw new BusinessException(ErrorCode.password_mismatch, "Wrong Password");
+            throw new BusinessException(ErrorCode.PASSWORD_MISMATCH, "Wrong Password");
         }
 
         return LoginResponse.builder()
@@ -78,10 +78,10 @@ public class AuthenticationService {
 
     public void sendVerificationEmail(EmailRequest emailRequest) {
         User user = userRepository.findByEmail(emailRequest.getEmail())
-                .orElseThrow(() -> new BusinessException(ErrorCode.account_missing, "User not found"));
+                .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_MISSING, "User not found"));
 
         if (user.isVerified()) {
-            throw new BusinessException(ErrorCode.forbidden, "User is already verified");
+            throw new BusinessException(ErrorCode.FORBIDDEN, "User is already verified");
         }
 
         String verificationCode = RandomStringUtils.randomAlphanumeric(24);
@@ -96,14 +96,14 @@ public class AuthenticationService {
 
     public void verify(EmailVerificationRequest emailVerificationRequest) {
         User user = userRepository.findByEmail(emailVerificationRequest.getEmail())
-                .orElseThrow(() -> new BusinessException(ErrorCode.account_missing, "User not found"));
+                .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_MISSING, "User not found"));
 
         if (user.getVerificationCodeExpirationDate().isBefore(DateUtil.now())) {
-            throw new BusinessException(ErrorCode.code_expired, "Verification code has expired");
+            throw new BusinessException(ErrorCode.CODE_EXPIRED, "Verification code has expired");
         }
 
         if (!user.getVerificationCode().equals(emailVerificationRequest.getVerificationCode())) {
-            throw new BusinessException(ErrorCode.code_mismatch, "Wrong verification code");
+            throw new BusinessException(ErrorCode.CODE_MISMATCH, "Wrong verification code");
         }
 
         user.setRecoveryCodeExpirationDate(null);
@@ -115,14 +115,14 @@ public class AuthenticationService {
 
     public void recovery(EmailRecoveryRequest emailRecoveryRequest) {
         User user = userRepository.findByEmail(emailRecoveryRequest.getEmail())
-                .orElseThrow(() -> new BusinessException(ErrorCode.account_missing, "User not found"));
+                .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_MISSING, "User not found"));
 
         if (user.getRecoveryCodeExpirationDate().isBefore(DateUtil.now())) {
-            throw new BusinessException(ErrorCode.code_expired, "The code is expired!");
+            throw new BusinessException(ErrorCode.CODE_EXPIRED, "The code is expired!");
         }
 
         if (!user.getRecoveryCode().equals(emailRecoveryRequest.getRecoveryCode())) {
-            throw new BusinessException(ErrorCode.code_mismatch, "The codes dont match!");
+            throw new BusinessException(ErrorCode.CODE_MISMATCH, "The codes dont match!");
         }
 
         user.setRecoveryCode(null);
@@ -134,7 +134,7 @@ public class AuthenticationService {
 
     public void sendRecoveryEmail(EmailRequest emailRequest) {
         User user = userRepository.findByEmail(emailRequest.getEmail())
-                .orElseThrow(() -> new BusinessException(ErrorCode.account_missing, "User not found"));
+                .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_MISSING, "User not found"));
 
         String recoveryCode = RandomStringUtils.randomAlphanumeric(24);
         ZonedDateTime recoveryCodeExpiredDate = DateUtil.now().plusDays(1);
@@ -148,10 +148,10 @@ public class AuthenticationService {
 
     public void resetPassword(Optional<User> userOptional, ResetPasswordRequest resetPasswordRequest) {
         User user = userOptional
-                .orElseThrow(() -> new BusinessException(ErrorCode.account_missing, "User not found"));
+                .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_MISSING, "User not found"));
 
         if (!passwordEncoder.matches(resetPasswordRequest.getOldPassword(), user.getPasswordHash())) {
-            throw new BusinessException(ErrorCode.password_mismatch, "Password mismatch.");
+            throw new BusinessException(ErrorCode.PASSWORD_MISMATCH, "Password mismatch.");
         }
 
         user.setPasswordHash(passwordEncoder.encode(resetPasswordRequest.getNewPassword()));

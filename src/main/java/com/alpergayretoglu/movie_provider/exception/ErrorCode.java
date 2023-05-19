@@ -2,21 +2,21 @@ package com.alpergayretoglu.movie_provider.exception;
 
 public enum ErrorCode {
 
-    unknown(400),
-    validation(422),
-    unauthorized(401),
-    forbidden(403),
-    resource_missing(404),
-    account_already_exists(409),
-    account_missing(404),
-    password_mismatch(409),
-    account_already_verified(403),
-    code_expired(410),
-    code_mismatch(409),
-    already_onboarded(409),
-    insufficient_balance(409),
-    conflict(409),
-    already_submitted(409);
+    UNKNOWN(400),
+    VALIDATION(422),
+    UNAUTHORIZED(401),
+    FORBIDDEN(403),
+    RESOURCE_MISSING(404),
+    ACCOUNT_ALREADY_EXISTS(409),
+    ACCOUNT_MISSING(404),
+    PASSWORD_MISMATCH(409),
+    ACCOUNT_ALREADY_VERIFIED(403),
+    CODE_EXPIRED(410),
+    CODE_MISMATCH(409),
+    ALREADY_ONBOARDED(409),
+    INSUFFICIENT_BALANCE(409),
+    CONFLICT(409),
+    ALREADY_SUBMITTED(409);
 
     private final int httpCode;
 

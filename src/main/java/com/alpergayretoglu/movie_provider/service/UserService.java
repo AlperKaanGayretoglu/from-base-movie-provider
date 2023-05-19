@@ -29,12 +29,12 @@ public class UserService {
 
     public User getUser(String userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.account_missing, "User not found"));
+                .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_MISSING, "User not found"));
     }
 
     public User createUser(CreateUserRequest createUserRequest) {
         if (userRepository.existsByEmail(createUserRequest.getEmail())) {
-            throw new BusinessException(ErrorCode.account_already_exists, "Account already exists");
+            throw new BusinessException(ErrorCode.ACCOUNT_ALREADY_EXISTS, "Account already exists");
         }
 
         User newUser = CreateUserRequest.toEntity(createUserRequest);
@@ -47,14 +47,14 @@ public class UserService {
 
     public User updateUser(String userId, UpdateUserRequest updateUserRequest) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.resource_missing, "User not found"));
+                .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_MISSING, "User not found"));
 
         return userRepository.save(UpdateUserRequest.toEntity(user, updateUserRequest));
     }
 
     public User deleteUser(String userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.resource_missing, "User not found"));
+                .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_MISSING, "User not found"));
 
         userRepository.delete(user);
 
