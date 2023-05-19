@@ -1,39 +1,53 @@
 package com.alpergayretoglu.movie_provider.model.request.user;
 
-import com.alpergayretoglu.movie_provider.model.enums.UserRole;
+import com.alpergayretoglu.movie_provider.constants.ApplicationConstants;
+import com.alpergayretoglu.movie_provider.model.entity.User;
+import lombok.Builder;
 import lombok.Data;
-import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Data
-@ToString
+@Builder
 public class CreateUserRequest {
 
-    @Email(message = "Geçersiz e-posta adresi.")
-    @NotEmpty(message = "Mail adresi boş bırakılamaz!")
-    private String email;
-
-    @NotEmpty(message = "İsim boş bırakılamaz!")
+    @NotBlank(message = "Name cannot be empty!")
     private String name;
 
-    @NotEmpty(message = "Soyisim boş bırakılamaz!")
+    @NotBlank(message = "Surname cannot be empty!")
     private String surname;
 
-    @NotNull(message = "Kullanıcı rolü boş bırakılamaz!")
-    private UserRole userRole;
-    
-    private String photoId;
+    @Email(message = "Invalid email address!")
+    @NotBlank(message = "Mail address cannot be empty!")
+    private String email;
 
-    @NotNull(message = "E-posta adresi görünürlüğü boş bırakılamaz!")
-    private Boolean emailVisible;
+    @NotBlank
+    @Size(min = ApplicationConstants.PASSWORD_MIN_LENGTH, max = ApplicationConstants.PASSWORD_MAX_LENGTH)
+    private String password;
 
-    @NotBlank(message = "Açıklama boş olamaz!")
+    @NotNull(message = "Email visibility cannot be empty!")
+    @Builder.Default
+    private Boolean emailVisible = false;
+
+    @Builder.Default
+    private String photoId = "";
+
+    @NotBlank(message = "Description cannot be empty!")
     @Length(min = 20, max = 1500)
-    private String description;
+    @Builder.Default
+    private String description = "";
+
+    public static User toEntity(CreateUserRequest request) {
+        return User.builder()
+                .name(request.getName())
+                .surname(request.getSurname())
+                .email(request.getEmail())
+                .passwordHash(request.getPassword())
+                .build();
+    }
 
 }

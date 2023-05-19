@@ -1,9 +1,13 @@
 package com.alpergayretoglu.movie_provider.service;
 
-import com.alpergayretoglu.movie_provider.model.entity.User;
 import com.alpergayretoglu.movie_provider.exception.BusinessException;
 import com.alpergayretoglu.movie_provider.exception.ErrorCode;
-import com.alpergayretoglu.movie_provider.model.request.auth.*;
+import com.alpergayretoglu.movie_provider.model.entity.User;
+import com.alpergayretoglu.movie_provider.model.request.auth.EmailRecoveryRequest;
+import com.alpergayretoglu.movie_provider.model.request.auth.EmailRequest;
+import com.alpergayretoglu.movie_provider.model.request.auth.EmailVerificationRequest;
+import com.alpergayretoglu.movie_provider.model.request.auth.ResetPasswordRequest;
+import com.alpergayretoglu.movie_provider.model.request.auth.login.LoginRequest;
 import com.alpergayretoglu.movie_provider.model.request.auth.register.RegisterRequest;
 import com.alpergayretoglu.movie_provider.model.response.LoginResponse;
 import com.alpergayretoglu.movie_provider.repository.UserRepository;

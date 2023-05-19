@@ -1,12 +1,18 @@
 package com.alpergayretoglu.movie_provider.controller;
 
-import com.alpergayretoglu.movie_provider.model.request.auth.*;
+import com.alpergayretoglu.movie_provider.model.request.auth.EmailRecoveryRequest;
+import com.alpergayretoglu.movie_provider.model.request.auth.EmailRequest;
+import com.alpergayretoglu.movie_provider.model.request.auth.EmailVerificationRequest;
+import com.alpergayretoglu.movie_provider.model.request.auth.login.LoginRequest;
 import com.alpergayretoglu.movie_provider.model.request.auth.register.RegisterRequest;
 import com.alpergayretoglu.movie_provider.model.response.LoginResponse;
 import com.alpergayretoglu.movie_provider.service.AuthenticationService;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 

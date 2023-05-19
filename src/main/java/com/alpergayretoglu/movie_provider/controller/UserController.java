@@ -3,7 +3,7 @@ package com.alpergayretoglu.movie_provider.controller;
 import com.alpergayretoglu.movie_provider.model.request.auth.ResetPasswordRequest;
 import com.alpergayretoglu.movie_provider.model.request.user.CreateUserRequest;
 import com.alpergayretoglu.movie_provider.model.request.user.UpdateUserRequest;
-import com.alpergayretoglu.movie_provider.model.response.user.UserResponse;
+import com.alpergayretoglu.movie_provider.model.response.UserResponse;
 import com.alpergayretoglu.movie_provider.service.AuthenticationService;
 import com.alpergayretoglu.movie_provider.service.UserService;
 import lombok.AllArgsConstructor;
@@ -25,27 +25,27 @@ public class UserController {
     @GetMapping
     @ApiPageable
     public Page<UserResponse> listUsers(@ApiIgnore Pageable pageable) {
-        return userService.listUsers(pageable);
+        return userService.listUsers(pageable).map(UserResponse::fromEntity);
     }
 
     @GetMapping("/{userId}")
     public UserResponse getUser(@PathVariable String userId) {
-        return userService.getUser(userId);
+        return UserResponse.fromEntity(userService.getUser(userId));
     }
 
     @PostMapping
     public UserResponse createUser(@Valid @RequestBody CreateUserRequest createUserRequest) {
-        return userService.createUser(createUserRequest);
+        return UserResponse.fromEntity(userService.createUser(createUserRequest));
     }
 
     @PutMapping("/{userId}")
     public UserResponse updateUser(@PathVariable String userId, @Valid @RequestBody UpdateUserRequest updateUserRequest) {
-        return userService.updateUser(userId, updateUserRequest);
+        return UserResponse.fromEntity(userService.updateUser(userId, updateUserRequest));
     }
 
     @DeleteMapping("/{userId}")
     public UserResponse deleteUser(@PathVariable String userId) {
-        return userService.deleteUser(userId);
+        return UserResponse.fromEntity(userService.deleteUser(userId));
     }
 
     @PostMapping("/reset-password")

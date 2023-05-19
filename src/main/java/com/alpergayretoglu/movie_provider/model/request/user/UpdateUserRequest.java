@@ -1,34 +1,42 @@
 package com.alpergayretoglu.movie_provider.model.request.user;
 
-import com.alpergayretoglu.movie_provider.model.enums.UserRole;
+import com.alpergayretoglu.movie_provider.model.entity.User;
+import lombok.Builder;
 import lombok.Data;
-import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Data
-@ToString
+@Builder
 public class UpdateUserRequest {
 
-    @NotEmpty(message = "İsim boş bırakılamaz!")
+    @NotBlank(message = "Name cannot be empty!")
     private String name;
 
-    @NotEmpty(message = "Soyisim boş bırakılamaz!")
+    @NotBlank(message = "Surname cannot be empty!")
     private String surname;
 
-    @NotNull(message = "Kullanıcı rolü boş bırakılamaz!")
-    private UserRole userRole;
+    @NotNull(message = "Email visibility cannot be empty!")
+    @Builder.Default
+    private Boolean emailVisible = false;
 
-    private String photoId;
+    @Builder.Default
+    private String photoId = "";
 
-    @NotNull(message = "E-posta adresi görünürlüğü boş bırakılamaz!")
-    private Boolean emailVisible;
-
-    @NotBlank(message = "Açıklama boş olamaz!")
+    @NotBlank(message = "Description cannot be empty!")
     @Length(min = 20, max = 1500)
-    private String description;
+    @Builder.Default
+    private String description = "";
+
+    public static User toEntity(User user, UpdateUserRequest request) {
+        return User.builder()
+                .name(request.getName())
+                .surname(request.getSurname())
+                .email(user.getEmail())
+                .passwordHash(user.getPasswordHash())
+                .build();
+    }
 
 }
