@@ -1,6 +1,6 @@
 package com.alpergayretoglu.movie_provider.service.client;
 
-import com.alpergayretoglu.movie_provider.entity.User;
+import com.alpergayretoglu.movie_provider.model.entity.User;
 import org.springframework.stereotype.Service;
 
 @Service

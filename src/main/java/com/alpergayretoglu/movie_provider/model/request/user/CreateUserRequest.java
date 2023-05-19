@@ -1,6 +1,6 @@
 package com.alpergayretoglu.movie_provider.model.request.user;
 
-import com.alpergayretoglu.movie_provider.entity.UserRole;
+import com.alpergayretoglu.movie_provider.model.enums.UserRole;
 import lombok.Data;
 import lombok.ToString;
 import org.hibernate.validator.constraints.Length;

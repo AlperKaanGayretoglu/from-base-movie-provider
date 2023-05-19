@@ -1,6 +1,6 @@
 package com.alpergayretoglu.movie_provider.repository;
 
-import com.alpergayretoglu.movie_provider.entity.User;
+import com.alpergayretoglu.movie_provider.model.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

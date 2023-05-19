@@ -1,6 +1,6 @@
 package com.alpergayretoglu.movie_provider.service;
 
-import com.alpergayretoglu.movie_provider.entity.User;
+import com.alpergayretoglu.movie_provider.model.entity.User;
 import com.alpergayretoglu.movie_provider.exception.BusinessException;
 import com.alpergayretoglu.movie_provider.exception.ErrorCode;
 import com.alpergayretoglu.movie_provider.model.request.auth.*;
