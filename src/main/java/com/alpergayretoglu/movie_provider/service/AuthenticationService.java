@@ -54,7 +54,7 @@ public class AuthenticationService {
     }
 
     public LoginResponse login(LoginRequest loginRequest) {
-        User user = userRepository.findFirstByEmail(loginRequest.getEmail())
+        User user = userRepository.findByEmail(loginRequest.getEmail())
                 .orElseThrow(() -> new BusinessException(ErrorCode.account_missing, "User not found"));
 
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPasswordHash())) {
@@ -77,7 +77,7 @@ public class AuthenticationService {
     }
 
     public void sendVerificationEmail(EmailRequest emailRequest) {
-        User user = userRepository.findFirstByEmail(emailRequest.getEmail())
+        User user = userRepository.findByEmail(emailRequest.getEmail())
                 .orElseThrow(() -> new BusinessException(ErrorCode.account_missing, "User not found"));
 
         if (user.isVerified()) {
@@ -95,7 +95,7 @@ public class AuthenticationService {
     }
 
     public void verify(EmailVerificationRequest emailVerificationRequest) {
-        User user = userRepository.findFirstByEmail(emailVerificationRequest.getEmail())
+        User user = userRepository.findByEmail(emailVerificationRequest.getEmail())
                 .orElseThrow(() -> new BusinessException(ErrorCode.account_missing, "User not found"));
 
         if (user.getVerificationCodeExpirationDate().isBefore(DateUtil.now())) {
@@ -114,7 +114,7 @@ public class AuthenticationService {
     }
 
     public void recovery(EmailRecoveryRequest emailRecoveryRequest) {
-        User user = userRepository.findFirstByEmail(emailRecoveryRequest.getEmail())
+        User user = userRepository.findByEmail(emailRecoveryRequest.getEmail())
                 .orElseThrow(() -> new BusinessException(ErrorCode.account_missing, "User not found"));
 
         if (user.getRecoveryCodeExpirationDate().isBefore(DateUtil.now())) {
@@ -133,7 +133,7 @@ public class AuthenticationService {
     }
 
     public void sendRecoveryEmail(EmailRequest emailRequest) {
-        User user = userRepository.findFirstByEmail(emailRequest.getEmail())
+        User user = userRepository.findByEmail(emailRequest.getEmail())
                 .orElseThrow(() -> new BusinessException(ErrorCode.account_missing, "User not found"));
 
         String recoveryCode = RandomStringUtils.randomAlphanumeric(24);
