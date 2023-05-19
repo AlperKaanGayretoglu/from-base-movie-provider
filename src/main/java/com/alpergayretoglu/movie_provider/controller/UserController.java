@@ -22,6 +22,8 @@ public class UserController {
     private final UserService userService;
     private final AuthenticationService authenticationService;
 
+    // TODO: DEFAULT METHODS
+
     @GetMapping
     @ApiPageable
     public Page<UserResponse> listUsers(@ApiIgnore Pageable pageable) {
@@ -52,5 +54,20 @@ public class UserController {
     public void resetPassword(@Valid @RequestBody ResetPasswordRequest resetPasswordRequest) {
         authenticationService.resetPassword(authenticationService.getAuthenticatedUser(), resetPasswordRequest);
     }
+
+    // TODO: EXTRA METHODS
+    @PostMapping("{userId}/subscribe/{subscriptionId}")
+    public void subscribe(@PathVariable String userId, @PathVariable String subscriptionId) {
+        userService.subscribe(userId, subscriptionId);
+    }
+
+
+    // ADMIN or SELF authorization testing route, TODO: SELF DOESN'T WORK!!! (problem with SelfFilter!!!)
+    /*
+    @GetMapping("/admin-or-self-test/{userId}")
+    public String adminOrSelfResource(@PathVariable String userId) {
+        return "You have reached protected resource.";
+    }
+     */
 
 }
