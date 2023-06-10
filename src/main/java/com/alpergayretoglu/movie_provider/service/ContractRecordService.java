@@ -7,8 +7,6 @@ import com.alpergayretoglu.movie_provider.repository.ContractRecordRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.ZonedDateTime;
-
 @Service
 @RequiredArgsConstructor
 public class ContractRecordService {
@@ -24,7 +22,6 @@ public class ContractRecordService {
                 .duration(subscription.getDuration())
                 .isActive(subscription.isActive())
                 .user(user)
-                .createdDate(ZonedDateTime.now())
                 .build());
     }
 
