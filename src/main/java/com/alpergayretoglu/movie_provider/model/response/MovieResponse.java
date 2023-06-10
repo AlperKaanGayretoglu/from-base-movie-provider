@@ -18,10 +18,19 @@ public class MovieResponse extends BaseResponse {
     private String title;
     private Set<String> categories;
 
+    // TODO: Implement this
+    //  private Set<UserResponse> fans;
+
+    private String description;
+
+    private int movieLength;
+
     public static MovieResponse fromEntity(Movie movie) {
         MovieResponse response = MovieResponse.builder()
                 .title(movie.getTitle())
                 .categories(new HashSet<>(movie.getCategories().stream().map(Category::getName).collect(Collectors.toList())))
+                .description(movie.getDescription())
+                .movieLength(movie.getMovieLength())
                 .build();
 
         return setCommonValuesFromEntity(response, movie);

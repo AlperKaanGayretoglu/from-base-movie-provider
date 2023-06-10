@@ -1,11 +1,7 @@
 package com.alpergayretoglu.movie_provider.model.response;
 
 import com.alpergayretoglu.movie_provider.model.entity.Category;
-import com.alpergayretoglu.movie_provider.model.entity.Movie;
 import lombok.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -15,14 +11,12 @@ import java.util.stream.Collectors;
 public class CategoryResponse extends BaseResponse {
 
     private String name;
-    private boolean isSuperCategory;
-    private List<String> movies;
+    private CategoryResponse parent;
 
     public static CategoryResponse fromEntity(Category category) {
         CategoryResponse response = CategoryResponse.builder()
                 .name(category.getName())
-                .isSuperCategory(category.isSuperCategory())
-                .movies(category.getMovies().stream().map(Movie::getTitle).collect(Collectors.toList()))
+                .parent(category.getParent() != null ? CategoryResponse.fromEntity(category.getParent()) : null)
                 .build();
 
         return setCommonValuesFromEntity(response, category);

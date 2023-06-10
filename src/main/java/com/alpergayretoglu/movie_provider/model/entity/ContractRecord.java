@@ -26,5 +26,16 @@ public class ContractRecord extends BaseEntity {
     @OneToOne
     private User user; // TODO: ER says "String user_id" but idk ???
 
-    private ZonedDateTime createdDate;
+    // TODO: Figure out if this is necessary ???
+    // private ZonedDateTime createdDate;
+
+    // TODO: Implement this
+    // @OneToMany
+    // private List<Invoice> invoices;
+
+    public int getRemainingDuration() {
+        int totalDuration = this.duration;
+        int remainingDuration = ZonedDateTime.now().compareTo(this.getCreated()) < 0 ? totalDuration : totalDuration - (int) ZonedDateTime.now().compareTo(this.getCreated());
+        return Math.max(remainingDuration, 0);
+    }
 }

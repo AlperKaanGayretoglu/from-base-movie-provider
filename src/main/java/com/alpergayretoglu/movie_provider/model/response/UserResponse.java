@@ -23,6 +23,9 @@ public class UserResponse extends BaseResponse {
 
     private boolean verified;
 
+    // TODO: Implement these
+    // private List<ContractRecord> subscriptionRecords;
+
     private List<String> followedCategories;
     private List<String> favoriteMovies;
 
