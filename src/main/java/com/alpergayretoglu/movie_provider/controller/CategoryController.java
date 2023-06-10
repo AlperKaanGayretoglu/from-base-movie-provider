@@ -5,9 +5,10 @@ import com.alpergayretoglu.movie_provider.model.request.category.CategoryUpdateR
 import com.alpergayretoglu.movie_provider.model.response.CategoryResponse;
 import com.alpergayretoglu.movie_provider.service.CategoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping("/category")
@@ -17,8 +18,9 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping
-    public List<CategoryResponse> listCategories() {
-        return categoryService.listCategories();
+    @ApiPageable
+    public Page<CategoryResponse> listCategories(@ApiIgnore Pageable pageable) {
+        return categoryService.listCategories(pageable);
     }
 
     @PostMapping("{parentId}")

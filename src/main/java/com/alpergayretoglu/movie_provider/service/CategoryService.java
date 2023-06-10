@@ -7,6 +7,8 @@ import com.alpergayretoglu.movie_provider.model.response.CategoryResponse;
 import com.alpergayretoglu.movie_provider.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,6 +39,10 @@ public class CategoryService {
     public List<CategoryResponse> listCategories() {
         return repository.findAll().stream()
                 .map(CategoryResponse::fromEntity).collect(Collectors.toList());
+    }
+
+    public Page<CategoryResponse> listCategories(Pageable pageable) {
+        return repository.findAll(pageable).map(CategoryResponse::fromEntity);
     }
 
     public Category findCategoryById(String categoryId) {

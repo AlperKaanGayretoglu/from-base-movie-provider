@@ -4,11 +4,12 @@ import com.alpergayretoglu.movie_provider.model.request.payment.PaymentRequest;
 import com.alpergayretoglu.movie_provider.model.response.InvoiceResponse;
 import com.alpergayretoglu.movie_provider.service.InvoiceService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/invoice")
@@ -17,9 +18,9 @@ public class InvoiceController {
     private final InvoiceService invoiceService;
 
     @GetMapping
-    public List<InvoiceResponse> listInvoices() {
-        return invoiceService.listInvoices()
-                .stream().map(InvoiceResponse::fromEntity).collect(Collectors.toList());
+    @ApiPageable
+    public Page<InvoiceResponse> listInvoices(@ApiIgnore Pageable pageable) {
+        return invoiceService.listInvoices(pageable).map(InvoiceResponse::fromEntity);
     }
 
     @GetMapping("{id}")

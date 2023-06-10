@@ -5,6 +5,8 @@ import com.alpergayretoglu.movie_provider.model.entity.Movie;
 import com.alpergayretoglu.movie_provider.model.response.MovieResponse;
 import com.alpergayretoglu.movie_provider.repository.MovieRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,4 +30,9 @@ public class MovieService {
         return repository.findAll().stream()
                 .map(MovieResponse::fromEntity).collect(Collectors.toList());
     }
+
+    public Page<MovieResponse> listMovies(Pageable pageable) {
+        return repository.findAll(pageable).map(MovieResponse::fromEntity);
+    }
+
 }

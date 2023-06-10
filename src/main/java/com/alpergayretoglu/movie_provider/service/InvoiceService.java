@@ -7,6 +7,8 @@ import com.alpergayretoglu.movie_provider.model.entity.Payment;
 import com.alpergayretoglu.movie_provider.model.request.payment.PaymentRequest;
 import com.alpergayretoglu.movie_provider.repository.InvoiceRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -20,6 +22,10 @@ public class InvoiceService {
 
     public List<Invoice> listInvoices() {
         return repository.findAll();
+    }
+
+    public Page<Invoice> listInvoices(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
     @Transactional
