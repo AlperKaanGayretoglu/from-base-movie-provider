@@ -39,14 +39,11 @@ public class AuthenticationService {
             throw new BusinessException(ErrorCode.ACCOUNT_ALREADY_EXISTS, "Account already exists");
         }
 
-        String verificationCode = RandomStringUtils.randomAlphanumeric(24);
-        ZonedDateTime verificationCodeExpirationDate = DateUtil.now().plusDays(1);
-
         User user = new User();
         user.setEmail(registerRequest.getEmail());
         user.setPasswordHash(passwordEncoder.encode(registerRequest.getPassword()));
-        user.setVerificationCode(verificationCode);
-        user.setVerificationCodeExpirationDate(verificationCodeExpirationDate);
+        user.setVerificationCode(generateRandomStringCode());
+        user.setVerificationCodeExpirationDate(generateExpirationDate());
         user.setVerified(false);
         userRepository.save(user);
 
@@ -54,8 +51,7 @@ public class AuthenticationService {
     }
 
     public LoginResponse login(LoginRequest loginRequest) {
-        User user = userRepository.findByEmail(loginRequest.getEmail())
-                .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_MISSING, "User not found"));
+        User user = getUserWithException(loginRequest.getEmail());
 
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPasswordHash())) {
             throw new BusinessException(ErrorCode.PASSWORD_MISMATCH, "Wrong Password");
@@ -77,26 +73,21 @@ public class AuthenticationService {
     }
 
     public void sendVerificationEmail(EmailRequest emailRequest) {
-        User user = userRepository.findByEmail(emailRequest.getEmail())
-                .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_MISSING, "User not found"));
+        User user = getUserWithException(emailRequest.getEmail());
 
         if (user.isVerified()) {
             throw new BusinessException(ErrorCode.FORBIDDEN, "User is already verified");
         }
 
-        String verificationCode = RandomStringUtils.randomAlphanumeric(24);
-        ZonedDateTime verificationCodeExpirationDate = DateUtil.now().plusDays(1);
-
-        user.setVerificationCode(verificationCode);
-        user.setVerificationCodeExpirationDate(verificationCodeExpirationDate);
+        user.setVerificationCode(generateRandomStringCode());
+        user.setVerificationCodeExpirationDate(generateExpirationDate());
         userRepository.save(user);
 
         emailClient.sendVerificationEmail(user);
     }
 
     public void verify(EmailVerificationRequest emailVerificationRequest) {
-        User user = userRepository.findByEmail(emailVerificationRequest.getEmail())
-                .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_MISSING, "User not found"));
+        User user = getUserWithException(emailVerificationRequest.getEmail());
 
         if (user.getVerificationCodeExpirationDate().isBefore(DateUtil.now())) {
             throw new BusinessException(ErrorCode.CODE_EXPIRED, "Verification code has expired");
@@ -114,8 +105,7 @@ public class AuthenticationService {
     }
 
     public void recovery(EmailRecoveryRequest emailRecoveryRequest) {
-        User user = userRepository.findByEmail(emailRecoveryRequest.getEmail())
-                .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_MISSING, "User not found"));
+        User user = getUserWithException(emailRecoveryRequest.getEmail());
 
         if (user.getRecoveryCodeExpirationDate().isBefore(DateUtil.now())) {
             throw new BusinessException(ErrorCode.CODE_EXPIRED, "The code is expired!");
@@ -133,14 +123,10 @@ public class AuthenticationService {
     }
 
     public void sendRecoveryEmail(EmailRequest emailRequest) {
-        User user = userRepository.findByEmail(emailRequest.getEmail())
-                .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_MISSING, "User not found"));
+        User user = getUserWithException(emailRequest.getEmail());
 
-        String recoveryCode = RandomStringUtils.randomAlphanumeric(24);
-        ZonedDateTime recoveryCodeExpiredDate = DateUtil.now().plusDays(1);
-
-        user.setRecoveryCode(recoveryCode);
-        user.setRecoveryCodeExpirationDate(recoveryCodeExpiredDate);
+        user.setRecoveryCode(generateRandomStringCode());
+        user.setRecoveryCodeExpirationDate(generateExpirationDate());
         userRepository.save(user);
 
         emailClient.sendRecoveryEmail(user);
@@ -156,6 +142,22 @@ public class AuthenticationService {
 
         user.setPasswordHash(passwordEncoder.encode(resetPasswordRequest.getNewPassword()));
         userRepository.save(user);
+    }
+
+
+    // COMMON METHODS
+
+    private User getUserWithException(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_MISSING, "User not found"));
+    }
+
+    private String generateRandomStringCode() {
+        return RandomStringUtils.randomAlphanumeric(24);
+    }
+
+    private ZonedDateTime generateExpirationDate() {
+        return DateUtil.now().plusDays(1);
     }
 
 }
