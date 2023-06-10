@@ -56,6 +56,9 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "recovery_code_expiration_date")
     private ZonedDateTime recoveryCodeExpirationDate;
 
+    // TODO: Implement this
+//    @ManyToOne
+//    private Subscription subscription;
 
     @ManyToMany
     @JoinTable(name = "users_movies",

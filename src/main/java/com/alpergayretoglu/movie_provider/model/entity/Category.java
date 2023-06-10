@@ -3,7 +3,10 @@ package com.alpergayretoglu.movie_provider.model.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -33,6 +36,10 @@ public class Category extends BaseEntity {
     @JsonIgnoreProperties("categories") // TODO: Is this necessary ???
     @Builder.Default
     private Set<Movie> movies = new HashSet<>();
+
+    // TODO: Implement this
+//    @ManyToMany(fetch = FetchType.LAZY)
+//    private Set<User> followers;
 
     private boolean isSuperCategory;
 

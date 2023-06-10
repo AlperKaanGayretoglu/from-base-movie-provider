@@ -24,6 +24,12 @@ public class Movie extends BaseEntity {
     @Builder.Default
     private Set<Category> categories = new HashSet<>();
 
-    // TODO: More attributes needed about movie (example: movie_length, starring...)
+    // TODO: Implement this
+//    @ManyToMany(mappedBy = "movies", fetch = FetchType.LAZY)
+//    private Set<User> fans = new HashSet<>();
+
+    private String description;
+
+    private int movieLength;
 
 }
