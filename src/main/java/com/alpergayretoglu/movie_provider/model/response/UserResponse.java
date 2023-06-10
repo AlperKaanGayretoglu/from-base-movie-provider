@@ -4,20 +4,17 @@ import com.alpergayretoglu.movie_provider.model.entity.Category;
 import com.alpergayretoglu.movie_provider.model.entity.Movie;
 import com.alpergayretoglu.movie_provider.model.entity.User;
 import com.alpergayretoglu.movie_provider.model.enums.UserRole;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Builder
-public class UserResponse {
-
-    private String id;
-    private ZonedDateTime created;
-    private ZonedDateTime updated;
+@AllArgsConstructor
+@NoArgsConstructor
+public class UserResponse extends BaseResponse {
 
     private String name;
     private String surname;
@@ -30,10 +27,7 @@ public class UserResponse {
     private List<String> favoriteMovies;
 
     public static UserResponse fromEntity(User user) {
-        return UserResponse.builder()
-                .id(user.getId())
-                .created(user.getCreated())
-                .updated(user.getUpdated())
+        UserResponse response = UserResponse.builder()
                 .name(user.getName())
                 .surname(user.getSurname())
                 .email(user.getEmail())
@@ -42,6 +36,8 @@ public class UserResponse {
                 .followedCategories(user.getFollowedCategories().stream().map(Category::getName).collect(Collectors.toList()))
                 .favoriteMovies(user.getFavoriteMovies().stream().map(Movie::getTitle).collect(Collectors.toList()))
                 .build();
+
+        return setCommonValuesFromEntity(response, user);
     }
 
 }

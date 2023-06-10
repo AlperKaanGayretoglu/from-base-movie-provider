@@ -1,25 +1,24 @@
 package com.alpergayretoglu.movie_provider.model.response;
 
 import com.alpergayretoglu.movie_provider.model.entity.Invoice;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-public class InvoiceResponse {
-    private String id;
+@AllArgsConstructor
+@NoArgsConstructor
+public class InvoiceResponse extends BaseResponse {
+
     private int fee;
     private ContractRecordResponse contractRecord;
 
     public static InvoiceResponse fromEntity(Invoice invoice) {
-        return InvoiceResponse.builder()
-                .id(invoice.getId())
+        InvoiceResponse response = InvoiceResponse.builder()
                 .fee(invoice.getFee())
                 .contractRecord(ContractRecordResponse.fromEntity(invoice.getContractRecord()))
                 .build();
+
+        return setCommonValuesFromEntity(response, invoice);
     }
 }

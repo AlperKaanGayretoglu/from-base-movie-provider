@@ -2,24 +2,28 @@ package com.alpergayretoglu.movie_provider.model.response;
 
 import com.alpergayretoglu.movie_provider.model.entity.Category;
 import com.alpergayretoglu.movie_provider.model.entity.Movie;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class MovieResponse {
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class MovieResponse extends BaseResponse {
 
     private String title;
     private Set<String> categories;
 
     public static MovieResponse fromEntity(Movie movie) {
-        return new MovieResponse(
-                movie.getTitle(),
-                new HashSet<>(movie.getCategories().stream().map(Category::getName).collect(Collectors.toList()))
-        );
+        MovieResponse response = MovieResponse.builder()
+                .title(movie.getTitle())
+                .categories(new HashSet<>(movie.getCategories().stream().map(Category::getName).collect(Collectors.toList())))
+                .build();
+
+        return setCommonValuesFromEntity(response, movie);
     }
 }
