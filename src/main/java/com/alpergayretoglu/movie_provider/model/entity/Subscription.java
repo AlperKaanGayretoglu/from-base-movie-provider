@@ -14,7 +14,7 @@ public class Subscription extends BaseEntity {
 
     private String name;
 
-    private int MonthlyFee;
+    private int monthlyFee;
 
     private int duration;
 
