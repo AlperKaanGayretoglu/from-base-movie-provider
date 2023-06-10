@@ -10,7 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -26,9 +25,8 @@ public class MovieService {
         return repository.findById(movieId).orElseThrow(EntityNotFoundException::new);
     }
 
-    public List<MovieResponse> listMovies() {
-        return repository.findAll().stream()
-                .map(MovieResponse::fromEntity).collect(Collectors.toList());
+    public List<Movie> listMovies() {
+        return repository.findAll();
     }
 
     public Page<MovieResponse> listMovies(Pageable pageable) {

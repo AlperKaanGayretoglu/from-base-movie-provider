@@ -2,6 +2,7 @@ package com.alpergayretoglu.movie_provider.service;
 
 import com.alpergayretoglu.movie_provider.exception.EntityNotFoundException;
 import com.alpergayretoglu.movie_provider.model.entity.Subscription;
+import com.alpergayretoglu.movie_provider.model.response.SubscriptionResponse;
 import com.alpergayretoglu.movie_provider.repository.SubscriptionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,8 +20,8 @@ public class SubscriptionService {
         return repository.findAll();
     }
 
-    public Page<Subscription> listSubscriptions(Pageable pageable) {
-        return repository.findAll(pageable);
+    public Page<SubscriptionResponse> listSubscriptions(Pageable pageable) {
+        return repository.findAll(pageable).map(SubscriptionResponse::fromEntity);
     }
 
     public Subscription findById(String id) {

@@ -12,7 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -22,9 +21,8 @@ public class CategoryService {
 
     private final CategoryRepository repository;
 
-
     // TODO: Can only add child category (so can't add a category that will be the parent of another one)
-    public CategoryResponse addCategory(String parentId, String name) {
+    public Category addCategory(String parentId, String name) {
         // check parent if exists
         Category parent = repository.findById(parentId)
                 .orElseThrow(EntityNotFoundException::new); // TODO: write a message here
@@ -33,12 +31,11 @@ public class CategoryService {
                 .isSuperCategory(false)
                 .parent(parent)
                 .build();
-        return CategoryResponse.fromEntity(repository.save(category));
+        return repository.save(category);
     }
 
-    public List<CategoryResponse> listCategories() {
-        return repository.findAll().stream()
-                .map(CategoryResponse::fromEntity).collect(Collectors.toList());
+    public List<Category> listCategories() {
+        return repository.findAll();
     }
 
     public Page<CategoryResponse> listCategories(Pageable pageable) {
@@ -50,7 +47,7 @@ public class CategoryService {
                 .orElseThrow(EntityNotFoundException::new);
     }
 
-    public CategoryResponse updateCategory(String id, CategoryUpdateRequest request) {
+    public Category updateCategory(String id, CategoryUpdateRequest request) {
         Category category = repository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
 
@@ -62,9 +59,8 @@ public class CategoryService {
 
         category.setName(request.getName());
         category.setParent(newParentCategory);
-        return CategoryResponse.fromEntity(repository.save(category));
+        return repository.save(category);
     }
-
 
     public void deleteCategory(String id) {
         Category category = repository.findById(id)
@@ -73,4 +69,5 @@ public class CategoryService {
             throw new RuntimeException("Super category cannot be deleted");
         repository.deleteById(id);
     }
+
 }

@@ -25,7 +25,7 @@ public class CategoryController {
 
     @PostMapping("{parentId}")
     public CategoryResponse addCategory(@PathVariable String parentId, @RequestBody CategoryCreateRequest request) {
-        return categoryService.addCategory(parentId, request.getName());
+        return CategoryResponse.fromEntity(categoryService.addCategory(parentId, request.getName()));
     }
 
     @GetMapping("{id}")
@@ -35,7 +35,7 @@ public class CategoryController {
 
     @PutMapping("{id}")
     public CategoryResponse updateCategory(@PathVariable String id, @RequestBody CategoryUpdateRequest request) {
-        return categoryService.updateCategory(id, request);
+        return CategoryResponse.fromEntity(categoryService.updateCategory(id, request));
     }
 
     @DeleteMapping("{id}")

@@ -1,6 +1,6 @@
 package com.alpergayretoglu.movie_provider.controller;
 
-import com.alpergayretoglu.movie_provider.model.entity.Subscription;
+import com.alpergayretoglu.movie_provider.model.response.SubscriptionResponse;
 import com.alpergayretoglu.movie_provider.service.SubscriptionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,7 +18,7 @@ public class SubscriptionController {
 
     @GetMapping
     @ApiPageable
-    public Page<Subscription> listSubscriptions(@ApiIgnore Pageable pageable) {
+    public Page<SubscriptionResponse> listSubscriptions(@ApiIgnore Pageable pageable) {
         return subscriptionService.listSubscriptions(pageable);
     }
 

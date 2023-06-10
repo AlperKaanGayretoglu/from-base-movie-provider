@@ -5,6 +5,7 @@ import com.alpergayretoglu.movie_provider.model.entity.ContractRecord;
 import com.alpergayretoglu.movie_provider.model.entity.Invoice;
 import com.alpergayretoglu.movie_provider.model.entity.Payment;
 import com.alpergayretoglu.movie_provider.model.request.payment.PaymentRequest;
+import com.alpergayretoglu.movie_provider.model.response.InvoiceResponse;
 import com.alpergayretoglu.movie_provider.repository.InvoiceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,8 +25,8 @@ public class InvoiceService {
         return repository.findAll();
     }
 
-    public Page<Invoice> listInvoices(Pageable pageable) {
-        return repository.findAll(pageable);
+    public Page<InvoiceResponse> listInvoices(Pageable pageable) {
+        return repository.findAll(pageable).map(InvoiceResponse::fromEntity);
     }
 
     @Transactional
