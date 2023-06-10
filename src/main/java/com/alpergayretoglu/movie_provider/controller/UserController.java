@@ -22,8 +22,6 @@ public class UserController {
     private final UserService userService;
     private final AuthenticationService authenticationService;
 
-    // TODO: DEFAULT METHODS
-
     @GetMapping
     @ApiPageable
     public Page<UserResponse> listUsers(@ApiIgnore Pageable pageable) {
