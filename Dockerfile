@@ -1,4 +1,4 @@
-FROM registry.gitlab.com/AlperKaanGayretoglu/from-base-movie-provider/base:latest as builder
+FROM registry.gitlab.com/alperkaangayretoglu/from-base-movie-provider/base:latest as builder
 WORKDIR /usr/local/app
 
 COPY ./ ./
