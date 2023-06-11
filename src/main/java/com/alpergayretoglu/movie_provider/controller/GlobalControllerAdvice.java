@@ -30,7 +30,8 @@ public class GlobalControllerAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ErrorDTO> customHandleBusinessException(BusinessException ex, WebRequest request) {
-        LOGGER.info("Business Error: {}", ex.getMessage());
+        LOGGER.info("Business Error:");
+        ex.printStackTrace();
         ErrorDTO error = ErrorDTO.builder()
                 .timestamp(DateUtil.now())
                 .status(ex.getErrorCode().getHttpCode())
@@ -45,7 +46,8 @@ public class GlobalControllerAdvice extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers,
                                                                   HttpStatus status, WebRequest request) {
-        LOGGER.info("handleMethodArgumentNotValid: {}", ex.getMessage());
+        LOGGER.info("handleMethodArgumentNotValid:");
+        ex.printStackTrace();
         List<String> errors = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
@@ -63,7 +65,8 @@ public class GlobalControllerAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErrorDTO> handleMethodArgumentNotValid(ConstraintViolationException ex, WebRequest request) {
-        LOGGER.info("handleMethodArgumentNotValid: {}", ex.getMessage());
+        LOGGER.info("handleMethodArgumentNotValid:");
+        ex.printStackTrace();
         List<String> errors = ex.getConstraintViolations().stream()
                 .map(ConstraintViolation::getMessage)
                 .collect(Collectors.toList());
@@ -81,7 +84,8 @@ public class GlobalControllerAdvice extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleMissingServletRequestPart(MissingServletRequestPartException ex,
                                                                      HttpHeaders headers,
                                                                      HttpStatus status, WebRequest request) {
-        LOGGER.info("handleMissingServletRequestPart: {}", ex.getMessage());
+        LOGGER.info("handleMissingServletRequestPart:");
+        ex.printStackTrace();
         ErrorDTO error = ErrorDTO.builder()
                 .timestamp(DateUtil.now())
                 .status(status.value())
@@ -93,7 +97,8 @@ public class GlobalControllerAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Object> handleException(EntityNotFoundException e) {
-        LOGGER.info("handleException: {}", e.getMessage());
+        LOGGER.info("handleException:");
+        e.printStackTrace();
         return new ResponseEntity<>(e.getMessage(), e.getStatusCode());
     }
 
