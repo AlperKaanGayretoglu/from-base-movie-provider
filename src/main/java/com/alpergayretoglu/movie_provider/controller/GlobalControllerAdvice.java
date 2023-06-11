@@ -45,6 +45,7 @@ public class GlobalControllerAdvice extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers,
                                                                   HttpStatus status, WebRequest request) {
+        LOGGER.info("handleMethodArgumentNotValid: {}", ex.getMessage());
         List<String> errors = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
@@ -61,7 +62,8 @@ public class GlobalControllerAdvice extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<ErrorDTO> constraintViolationException(ConstraintViolationException ex, WebRequest request) {
+    public ResponseEntity<ErrorDTO> handleMethodArgumentNotValid(ConstraintViolationException ex, WebRequest request) {
+        LOGGER.info("handleMethodArgumentNotValid: {}", ex.getMessage());
         List<String> errors = ex.getConstraintViolations().stream()
                 .map(ConstraintViolation::getMessage)
                 .collect(Collectors.toList());
@@ -79,6 +81,7 @@ public class GlobalControllerAdvice extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleMissingServletRequestPart(MissingServletRequestPartException ex,
                                                                      HttpHeaders headers,
                                                                      HttpStatus status, WebRequest request) {
+        LOGGER.info("handleMissingServletRequestPart: {}", ex.getMessage());
         ErrorDTO error = ErrorDTO.builder()
                 .timestamp(DateUtil.now())
                 .status(status.value())
@@ -90,6 +93,7 @@ public class GlobalControllerAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Object> handleException(EntityNotFoundException e) {
+        LOGGER.info("handleException: {}", e.getMessage());
         return new ResponseEntity<>(e.getMessage(), e.getStatusCode());
     }
 
