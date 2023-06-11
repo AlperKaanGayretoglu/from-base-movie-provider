@@ -15,8 +15,17 @@ public class Invoice extends BaseEntity {
 
     private int fee;
 
-    // TODO: Do we need to specify with which table ???
     @ManyToOne
-    private ContractRecord contractRecord; // TODO: ER says "String contract_record_id" but idk ???
+    private ContractRecord contractRecord;
+
+    public void pay(int amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Amount cannot be less than or equal to 0");
+        }
+        if (amount > fee) {
+            throw new IllegalArgumentException("Amount cannot be greater than fee");
+        }
+        fee -= amount;
+    }
 
 }
