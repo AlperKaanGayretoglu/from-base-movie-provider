@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
@@ -16,10 +17,15 @@ import springfox.documentation.annotations.ApiIgnore;
 public class SubscriptionController {
     private final SubscriptionService subscriptionService;
 
-    @GetMapping
     @ApiPageable
+    @GetMapping
     public Page<SubscriptionResponse> listSubscriptions(@ApiIgnore Pageable pageable) {
         return subscriptionService.listSubscriptions(pageable);
+    }
+
+    @GetMapping("{subId}")
+    public SubscriptionResponse getSubscription(@PathVariable String subId) {
+        return subscriptionService.getSubscription(subId);
     }
 
 }

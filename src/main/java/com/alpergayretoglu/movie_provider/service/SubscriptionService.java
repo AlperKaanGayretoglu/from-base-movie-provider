@@ -27,4 +27,8 @@ public class SubscriptionService {
     public Subscription findById(String id) {
         return repository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
+
+    public SubscriptionResponse getSubscription(String subId) {
+        return SubscriptionResponse.fromEntity(findById(subId));
+    }
 }
