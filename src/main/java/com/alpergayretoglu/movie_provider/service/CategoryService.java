@@ -17,16 +17,15 @@ public class CategoryService {
 
     private final CategoryRepository repository;
 
-    // TODO: Can only add child category (so can't add a category that will be the parent of another one)
-    public Category addCategory(String parentId, String name) {
-        // check parent if exists
-        Category parent = repository.findById(parentId)
-                .orElseThrow(EntityNotFoundException::new); // TODO: write a message here
+    public Category addCategory(String parentCategoryId, String name) {
+        Category parent = findCategoryById(parentCategoryId);
+
         Category category = Category.builder()
                 .name(name)
                 .isSuperCategory(false)
                 .parent(parent)
                 .build();
+
         return repository.save(category);
     }
 
@@ -36,30 +35,46 @@ public class CategoryService {
 
     public Category findCategoryById(String categoryId) {
         return repository.findById(categoryId)
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(() -> new EntityNotFoundException("Category not found with id: " + categoryId + "."));
     }
 
-    public Category updateCategory(String id, CategoryUpdateRequest request) {
-        Category category = repository.findById(id)
-                .orElseThrow(EntityNotFoundException::new);
+    public Category findCategoryByName(String categoryName) {
+        return repository.findCategoryByName(categoryName)
+                .orElseThrow(() -> new EntityNotFoundException("Category not found with name: " + categoryName + "."));
+    }
 
-        Category newParentCategory = repository.findCategoryByName(request.getParentName())
-                .orElseThrow(EntityNotFoundException::new);
+    public Category updateCategory(String categoryId, CategoryUpdateRequest request) {
+        Category category = findCategoryById(categoryId);
 
-        if (category.getId().equals(newParentCategory.getId()))
-            throw new RuntimeException("A category cannot be its own parent"); // TODO: instead of id, do name
+        if (category.isSuperCategory()) {
+            throw new RuntimeException("Super category cannot be updated");
+        }
+
+        Category newParentCategory = findCategoryByName(request.getParentName());
+
+        if (category.getId().equals(newParentCategory.getId())) {
+            throw new RuntimeException("A category cannot be its own parent");
+        }
 
         category.setName(request.getName());
         category.setParent(newParentCategory);
         return repository.save(category);
     }
 
-    public void deleteCategory(String id) {
-        Category category = repository.findById(id)
-                .orElseThrow(EntityNotFoundException::new);
-        if (category.isSuperCategory())
+    public void deleteCategory(String categoryId) {
+        Category category = findCategoryById(categoryId);
+
+        if (category.isSuperCategory()) {
             throw new RuntimeException("Super category cannot be deleted");
-        repository.deleteById(id);
+        }
+
+        // assign all subcategories to grandparent
+        Category grandParent = category.getParent();
+        for (Category subCategory : category.getSubCategories()) {
+            subCategory.setParent(grandParent);
+        }
+
+        repository.delete(category);
     }
 
 }

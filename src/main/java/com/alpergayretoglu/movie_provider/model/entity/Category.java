@@ -24,10 +24,11 @@ public class Category extends BaseEntity {
     @ManyToMany(mappedBy = "followedCategories", fetch = FetchType.LAZY)
     private Set<User> followers;
 
+    @Builder.Default
+    private boolean isSuperCategory = false;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private Category parent;
-
-    private boolean isSuperCategory;
 
     @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
     @Builder.Default
