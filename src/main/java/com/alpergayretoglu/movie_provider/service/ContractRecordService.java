@@ -18,9 +18,6 @@ public class ContractRecordService {
     private final ContractRecordRepository repository;
     private final InvoiceService invoiceService;
 
-    /**
-     * Copies subscription details to avoid fee change (denormalization)
-     */
     public ContractRecord addContract(User user, Subscription subscription) {
         return repository.save(ContractRecord.builder()
                 .name(subscription.getName())

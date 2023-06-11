@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Slf4j
 public class CategoryService {
-    // TODO: Return the object instead of the Response counterpart for all functions
 
     private final CategoryRepository repository;
 
