@@ -3,6 +3,7 @@ package com.alpergayretoglu.movie_provider.service;
 import com.alpergayretoglu.movie_provider.exception.EntityNotFoundException;
 import com.alpergayretoglu.movie_provider.model.entity.Movie;
 import com.alpergayretoglu.movie_provider.model.request.movie.MovieCreateRequest;
+import com.alpergayretoglu.movie_provider.model.request.movie.MovieUpdateRequest;
 import com.alpergayretoglu.movie_provider.model.response.MovieResponse;
 import com.alpergayretoglu.movie_provider.repository.CategoryRepository;
 import com.alpergayretoglu.movie_provider.repository.MovieRepository;
@@ -42,5 +43,9 @@ public class MovieService {
 
     public MovieResponse createMovie(MovieCreateRequest request) {
         return MovieResponse.fromEntity(movieRepository.save(MovieCreateRequest.toEntity(request, categoryRepository)));
+    }
+
+    public MovieResponse updateMovie(String movieId, MovieUpdateRequest request) {
+        return MovieResponse.fromEntity(MovieUpdateRequest.updateWith(findMovieById(movieId), request, categoryRepository));
     }
 }

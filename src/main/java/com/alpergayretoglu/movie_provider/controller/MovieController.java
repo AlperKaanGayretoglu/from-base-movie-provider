@@ -1,6 +1,7 @@
 package com.alpergayretoglu.movie_provider.controller;
 
 import com.alpergayretoglu.movie_provider.model.request.movie.MovieCreateRequest;
+import com.alpergayretoglu.movie_provider.model.request.movie.MovieUpdateRequest;
 import com.alpergayretoglu.movie_provider.model.response.MovieResponse;
 import com.alpergayretoglu.movie_provider.service.MovieService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,11 @@ public class MovieController {
     @PostMapping
     public MovieResponse createMovie(@RequestBody MovieCreateRequest request) {
         return movieService.createMovie(request);
+    }
+
+    @PutMapping("/{movieId}")
+    public MovieResponse updateMovie(@PathVariable String movieId, @RequestBody MovieUpdateRequest request) {
+        return movieService.updateMovie(movieId, request);
     }
 
 }
