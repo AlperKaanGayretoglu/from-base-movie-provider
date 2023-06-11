@@ -1,8 +1,8 @@
 package com.alpergayretoglu.movie_provider.controller;
 
 import com.alpergayretoglu.movie_provider.model.request.auth.ResetPasswordRequest;
-import com.alpergayretoglu.movie_provider.model.request.user.CreateUserRequest;
-import com.alpergayretoglu.movie_provider.model.request.user.UpdateUserRequest;
+import com.alpergayretoglu.movie_provider.model.request.user.UserCreateRequest;
+import com.alpergayretoglu.movie_provider.model.request.user.UserUpdateRequest;
 import com.alpergayretoglu.movie_provider.model.response.InvoiceResponse;
 import com.alpergayretoglu.movie_provider.model.response.UserResponse;
 import com.alpergayretoglu.movie_provider.service.AuthenticationService;
@@ -35,13 +35,13 @@ public class UserController {
     }
 
     @PostMapping
-    public UserResponse createUser(@Valid @RequestBody CreateUserRequest createUserRequest) {
-        return UserResponse.fromEntity(userService.createUser(createUserRequest));
+    public UserResponse createUser(@Valid @RequestBody UserCreateRequest userCreateRequest) {
+        return UserResponse.fromEntity(userService.createUser(userCreateRequest));
     }
 
     @PutMapping("/{userId}")
-    public UserResponse updateUser(@PathVariable String userId, @Valid @RequestBody UpdateUserRequest updateUserRequest) {
-        return UserResponse.fromEntity(userService.updateUser(userId, updateUserRequest));
+    public UserResponse updateUser(@PathVariable String userId, @Valid @RequestBody UserUpdateRequest userUpdateRequest) {
+        return UserResponse.fromEntity(userService.updateUser(userId, userUpdateRequest));
     }
 
     @DeleteMapping("/{userId}")

@@ -5,8 +5,8 @@ import com.alpergayretoglu.movie_provider.exception.BusinessException;
 import com.alpergayretoglu.movie_provider.exception.ErrorCode;
 import com.alpergayretoglu.movie_provider.model.entity.*;
 import com.alpergayretoglu.movie_provider.model.enums.UserRole;
-import com.alpergayretoglu.movie_provider.model.request.user.CreateUserRequest;
-import com.alpergayretoglu.movie_provider.model.request.user.UpdateUserRequest;
+import com.alpergayretoglu.movie_provider.model.request.user.UserCreateRequest;
+import com.alpergayretoglu.movie_provider.model.request.user.UserUpdateRequest;
 import com.alpergayretoglu.movie_provider.model.response.InvoiceResponse;
 import com.alpergayretoglu.movie_provider.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -41,24 +41,24 @@ public class UserService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_MISSING, "User not found with id: " + userId));
     }
 
-    public User createUser(CreateUserRequest createUserRequest) {
-        if (userRepository.existsByEmail(createUserRequest.getEmail())) {
+    public User createUser(UserCreateRequest userCreateRequest) {
+        if (userRepository.existsByEmail(userCreateRequest.getEmail())) {
             throw new BusinessException(ErrorCode.ACCOUNT_ALREADY_EXISTS, "Account already exists");
         }
 
-        User newUser = CreateUserRequest.toEntity(createUserRequest);
-        newUser.setPasswordHash(passwordEncoder.encode(createUserRequest.getPassword()));
+        User newUser = UserCreateRequest.toEntity(userCreateRequest);
+        newUser.setPasswordHash(passwordEncoder.encode(userCreateRequest.getPassword()));
         newUser.setUserRole(UserRole.GUEST);
         newUser.setVerified(false);
 
         return userRepository.save(newUser);
     }
 
-    public User updateUser(String userId, UpdateUserRequest updateUserRequest) {
+    public User updateUser(String userId, UserUpdateRequest userUpdateRequest) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_MISSING, "User not found with id: " + userId));
 
-        return userRepository.save(UpdateUserRequest.toEntity(user, updateUserRequest));
+        return userRepository.save(UserUpdateRequest.toEntity(user, userUpdateRequest));
     }
 
     public User deleteUser(String userId) {
