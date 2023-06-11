@@ -1,5 +1,6 @@
 package com.alpergayretoglu.movie_provider.controller;
 
+import com.alpergayretoglu.movie_provider.model.response.CategoryResponse;
 import com.alpergayretoglu.movie_provider.model.response.MovieResponse;
 import com.alpergayretoglu.movie_provider.model.response.UserResponse;
 import com.alpergayretoglu.movie_provider.service.UserService;
@@ -21,16 +22,20 @@ public class UserInterestController {
         return userService.getFavoriteMovies(userId, pageable).map(MovieResponse::fromEntity);
     }
 
-    // TODO: Implement the following methods:
-    // - getFavoriteMovie
-    // - getFollowedCategories
-    // - getFollowedCategory
-
     @GetMapping("/favorite-movies/{movieId}")
     public MovieResponse getFavoriteMovie(@PathVariable String userId, @PathVariable String movieId) {
         return MovieResponse.fromEntity(userService.getFavoriteMovie(userId, movieId));
     }
 
+    @GetMapping("/followed-categories")
+    public Page<CategoryResponse> getFollowedCategories(@PathVariable String userId, @ApiIgnore Pageable pageable) {
+        return userService.getFollowedCategories(userId, pageable).map(CategoryResponse::fromEntity);
+    }
+
+    @GetMapping("/followed-categories/{categoryId}")
+    public CategoryResponse getFollowedCategory(@PathVariable String userId, @PathVariable String categoryId) {
+        return CategoryResponse.fromEntity(userService.getFollowedCategory(userId, categoryId));
+    }
 
     @PostMapping("/movie/{movieId}/favorite")
     public UserResponse favoriteMovie(@PathVariable String userId, @PathVariable String movieId) {

@@ -169,4 +169,21 @@ public class UserService {
 
         return movie;
     }
+
+    public Page<Category> getFollowedCategories(String userId, Pageable pageable) {
+        User user = getUserById(userId);
+        List<Category> categories = new ArrayList<>(user.getFollowedCategories());
+        return new RestResponsePage<>(categories, pageable, categories.size());
+    }
+
+    public Category getFollowedCategory(String userId, String categoryId) {
+        User user = getUserById(userId);
+        Category category = categoryService.findCategoryById(categoryId);
+
+        if (!user.getFollowedCategories().contains(category)) {
+            throw new BusinessException(ErrorCode.RESOURCE_MISSING, "Category not found in followed categories");
+        }
+
+        return category;
+    }
 }
