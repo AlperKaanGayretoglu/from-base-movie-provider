@@ -1,7 +1,11 @@
 package com.alpergayretoglu.movie_provider.model.response;
 
 import com.alpergayretoglu.movie_provider.model.entity.ContractRecord;
+import com.alpergayretoglu.movie_provider.model.entity.Invoice;
 import lombok.*;
+
+import javax.persistence.OneToMany;
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -17,9 +21,8 @@ public class ContractRecordResponse extends BaseResponse {
     private boolean isActive;
     private UserResponse user;
 
-    // TODO: Implement this
-    // @OneToMany
-    // private List<Invoice> invoices;
+    @OneToMany(mappedBy = "contractRecord")
+    private List<Invoice> invoices;
 
     public static ContractRecordResponse fromEntity(ContractRecord contractRecord) {
         ContractRecordResponse response = ContractRecordResponse.builder()

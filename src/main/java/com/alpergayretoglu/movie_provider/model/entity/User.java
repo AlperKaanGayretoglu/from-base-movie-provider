@@ -48,7 +48,7 @@ public class User extends BaseEntity implements UserDetails {
 
     @Column(name = "verification_code_expiration_date")
     @Builder.Default
-    private ZonedDateTime verificationCodeExpirationDate = ZonedDateTime.now().plusDays(1); // TODO: fixed value?
+    private ZonedDateTime verificationCodeExpirationDate = ZonedDateTime.now().plusDays(1);
 
     @Column(name = "recovery_code")
     private String recoveryCode;

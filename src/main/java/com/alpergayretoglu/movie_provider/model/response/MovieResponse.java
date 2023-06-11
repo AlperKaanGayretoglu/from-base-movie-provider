@@ -4,6 +4,7 @@ import com.alpergayretoglu.movie_provider.model.entity.Category;
 import com.alpergayretoglu.movie_provider.model.entity.Movie;
 import lombok.*;
 
+import javax.persistence.ManyToMany;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -18,8 +19,8 @@ public class MovieResponse extends BaseResponse {
     private String title;
     private Set<String> categories;
 
-    // TODO: Implement this
-    //  private Set<UserResponse> fans;
+    @ManyToMany(mappedBy = "favoriteMovies")
+    private Set<UserResponse> fans;
 
     private String description;
 
