@@ -9,6 +9,7 @@ import com.alpergayretoglu.movie_provider.model.request.user.UserCreateRequest;
 import com.alpergayretoglu.movie_provider.model.request.user.UserUpdateRequest;
 import com.alpergayretoglu.movie_provider.model.response.InvoiceResponse;
 import com.alpergayretoglu.movie_provider.repository.UserRepository;
+import com.alpergayretoglu.movie_provider.util.RestResponsePage;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -36,7 +38,7 @@ public class UserService {
         return userRepository.findAll(pageable);
     }
 
-    public User getUser(String userId) {
+    public User getUserById(String userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_MISSING, "User not found with id: " + userId));
     }
@@ -55,24 +57,19 @@ public class UserService {
     }
 
     public User updateUser(String userId, UserUpdateRequest userUpdateRequest) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_MISSING, "User not found with id: " + userId));
-
+        User user = getUserById(userId);
         return userRepository.save(UserUpdateRequest.toEntity(user, userUpdateRequest));
     }
 
     public User deleteUser(String userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_MISSING, "User not found with id: " + userId));
-
+        User user = getUserById(userId);
         userRepository.delete(user);
 
         return user;
     }
 
     public ContractRecord subscribe(String userId, String subscriptionId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_MISSING, "User not found with id: " + userId));
+        User user = getUserById(userId);
         Subscription subscription = subscriptionService.findById(subscriptionId);
 
         // check if user is verified
@@ -96,9 +93,7 @@ public class UserService {
 
 
     public Page<InvoiceResponse> listInvoicesForUser(String userId, Pageable pageable) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_MISSING, "User not found with id: " + userId));
-
+        User user = getUserById(userId);
         return contractRecordService.listInvoicesForUser(user, pageable);
     }
 
@@ -158,4 +153,9 @@ public class UserService {
         return user;
     }
 
+    public Page<Movie> getFavoriteMovies(String userId, Pageable pageable) {
+        User user = getUserById(userId);
+        List<Movie> movies = new ArrayList<>(user.getFavoriteMovies());
+        return new RestResponsePage<>(movies, pageable, movies.size());
+    }
 }

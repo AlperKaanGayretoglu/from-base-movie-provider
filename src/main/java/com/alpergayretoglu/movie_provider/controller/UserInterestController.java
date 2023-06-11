@@ -1,12 +1,13 @@
 package com.alpergayretoglu.movie_provider.controller;
 
+import com.alpergayretoglu.movie_provider.model.response.MovieResponse;
 import com.alpergayretoglu.movie_provider.model.response.UserResponse;
 import com.alpergayretoglu.movie_provider.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping("/user/{userId}")
@@ -14,6 +15,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserInterestController {
 
     private final UserService userService;
+
+    @GetMapping("/favorite-movies")
+    public Page<MovieResponse> getFavoriteMovies(@PathVariable String userId, @ApiIgnore Pageable pageable) {
+        return userService.getFavoriteMovies(userId, pageable).map(MovieResponse::fromEntity);
+    }
+
+    // TODO: Implement the following methods:
+    // - getFavoriteMovie
+    // - getFollowedCategories
+    // - getFollowedCategory
+
 
     @PostMapping("/movie/{movieId}/favorite")
     public UserResponse favoriteMovie(@PathVariable String userId, @PathVariable String movieId) {

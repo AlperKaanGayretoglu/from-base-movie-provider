@@ -31,7 +31,7 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public UserResponse getUser(@PathVariable String userId) {
-        return UserResponse.fromEntity(userService.getUser(userId));
+        return UserResponse.fromEntity(userService.getUserById(userId));
     }
 
     @PostMapping
