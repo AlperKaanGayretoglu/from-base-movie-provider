@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @Transactional
@@ -72,84 +71,32 @@ public class UserService {
         Subscription subscription = subscriptionService.findById(subscriptionId);
 
         // check if user is verified
-        if (!user.isVerified()) throw new BadRequestException("only verified users can subscribe");
-
-        // check if user has already a subscription (allow only upgrading)
-        ContractRecord contractRecord = user.getContractRecord();
-
-        if (contractRecord != null) {
-            if (contractRecord.getDuration() >= subscription.getDuration()) {
-                throw new BadRequestException("you can only upgrade your subscription");
-            }
+        if (!user.isVerified()) {
+            throw new BadRequestException("Only verified users can subscribe");
         }
 
         // when a guest user buys a subscription, assign a member role
-        if (user.getUserRole() == UserRole.GUEST) user.setUserRole(UserRole.MEMBER);
+        if (user.getUserRole() == UserRole.GUEST) {
+            user.setUserRole(UserRole.MEMBER);
+        }
 
-        if (contractRecord == null) return contractRecordService.addContract(user, subscription);
-        else return contractRecordService.updateContract(contractRecord, subscription);
+        ContractRecord oldContractRecord = user.getContractRecord();
+
+        ContractRecord newContractRecord = (oldContractRecord == null) ?
+                contractRecordService.addContract(user, subscription) :
+                contractRecordService.updateContract(oldContractRecord, subscription);
+
+        user.setContractRecord(newContractRecord);
+        user.setSubscription(subscription);
+
+        userRepository.save(user);
+
+        return newContractRecord;
     }
-
 
     public Page<InvoiceResponse> listInvoicesForUser(String userId, Pageable pageable) {
         User user = getUserById(userId);
         return contractRecordService.listInvoicesForUser(user, pageable);
-    }
-
-    // Interests : Follow Categories and Favorite Movies
-    public User favoriteMovie(String userId, String movieId) {
-        return addOrRemoveMovieFromUserFavoriteMovies(userId, movieId, true);
-    }
-
-    public User unfavoriteMovie(String userId, String movieId) {
-        return addOrRemoveMovieFromUserFavoriteMovies(userId, movieId, false);
-    }
-
-    public User followCategory(String userId, String categoryId) {
-        return followHelper(userId, categoryId, true);
-    }
-
-    public User unfollowCategory(String userId, String categoryId) {
-        return followHelper(userId, categoryId, false);
-    }
-
-    /**
-     * Helper method to avoid duplicate codes.
-     * boolean isAddition field checks if it is a favorite or unfavorite method
-     */
-    private User addOrRemoveMovieFromUserFavoriteMovies(String userId, String movieId, boolean isAddition) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_MISSING, "User not found with id: " + userId));
-        Movie movie = movieService.findMovieById(movieId);
-        Set<Movie> movies = user.getFavoriteMovies();
-
-        if (isAddition) {
-            movies.add(movie);
-        } else {
-            movies.remove(movie);
-        }
-
-        userRepository.save(user);
-        return user;
-    }
-
-    /**
-     * Helper method to avoid duplicate codes. <br>
-     * (TODO still needs a refactor of duplicate codes with addOrRemoveMovieFromUserFavoriteMovies method) <br>
-     * To refactor, maybe use ICrudService interface? and give the method of class and its service. <br>
-     * boolean isFollow field checks if it is a follow or unfollow request
-     */
-    private User followHelper(String userId, String categoryId, boolean isFollow) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_MISSING, "User not found with id: " + userId));
-        Category category = categoryService.findCategoryById(categoryId);
-
-        List<Category> categories = user.getFollowedCategories();
-
-        if (isFollow && !categories.contains(category)) categories.add(category);
-        else categories.remove(category);
-        userRepository.save(user);
-        return user;
     }
 
     public Page<Movie> getFavoriteMovies(String userId, Pageable pageable) {
@@ -163,7 +110,7 @@ public class UserService {
         Movie movie = movieService.findMovieById(movieId);
 
         if (!user.getFavoriteMovies().contains(movie)) {
-            throw new BusinessException(ErrorCode.RESOURCE_MISSING, "Movie not found in favorites");
+            throw new BusinessException(ErrorCode.RESOURCE_MISSING, "Movie not found in favorite movies");
         }
 
         return movie;
@@ -185,4 +132,29 @@ public class UserService {
 
         return category;
     }
+
+    public User favoriteMovie(String userId, String movieId) {
+        User user = getUserById(userId);
+        user.addFavoriteMovie(movieService.findMovieById(movieId));
+        return userRepository.save(user);
+    }
+
+    public User unfavoriteMovie(String userId, String movieId) {
+        User user = getUserById(userId);
+        user.removeFavoriteMovie(movieService.findMovieById(movieId));
+        return userRepository.save(user);
+    }
+
+    public User followCategory(String userId, String categoryId) {
+        User user = getUserById(userId);
+        user.addFollowedCategory(categoryService.findCategoryById(categoryId));
+        return userRepository.save(user);
+    }
+
+    public User unfollowCategory(String userId, String categoryId) {
+        User user = getUserById(userId);
+        user.removeFollowedCategory(categoryService.findCategoryById(categoryId));
+        return userRepository.save(user);
+    }
+
 }

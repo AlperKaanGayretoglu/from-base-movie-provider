@@ -56,9 +56,8 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "recovery_code_expiration_date")
     private ZonedDateTime recoveryCodeExpirationDate;
 
-    // TODO: Implement this
-//    @ManyToOne
-//    private Subscription subscription;
+    @ManyToOne
+    private Subscription subscription;
 
     @ManyToMany
     @JoinTable(name = "users_movies",
@@ -74,11 +73,26 @@ public class User extends BaseEntity implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "categories_id")
     )
     @Builder.Default
-    private List<Category> followedCategories = new LinkedList<>();
+    private Set<Category> followedCategories = new HashSet<>();
 
     @OneToOne(mappedBy = "user")
     private ContractRecord contractRecord;
 
+    public void addFavoriteMovie(Movie movie) {
+        favoriteMovies.add(movie);
+    }
+
+    public void removeFavoriteMovie(Movie movie) {
+        favoriteMovies.remove(movie);
+    }
+
+    public void addFollowedCategory(Category category) {
+        followedCategories.add(category);
+    }
+
+    public void removeFollowedCategory(Category category) {
+        followedCategories.remove(category);
+    }
 
     // security layer:
     @Override
