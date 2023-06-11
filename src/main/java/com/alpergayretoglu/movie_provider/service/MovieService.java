@@ -2,7 +2,9 @@ package com.alpergayretoglu.movie_provider.service;
 
 import com.alpergayretoglu.movie_provider.exception.EntityNotFoundException;
 import com.alpergayretoglu.movie_provider.model.entity.Movie;
+import com.alpergayretoglu.movie_provider.model.request.movie.MovieCreateRequest;
 import com.alpergayretoglu.movie_provider.model.response.MovieResponse;
+import com.alpergayretoglu.movie_provider.repository.CategoryRepository;
 import com.alpergayretoglu.movie_provider.repository.MovieRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,25 +17,30 @@ import java.util.List;
 @AllArgsConstructor
 public class MovieService {
 
-    private MovieRepository repository;
+    private MovieRepository movieRepository;
+    private CategoryRepository categoryRepository;
 
     public void addMovie(Movie movie) {
-        repository.save(movie);
+        movieRepository.save(movie);
     }
 
     public Movie findMovieById(String movieId) {
-        return repository.findById(movieId).orElseThrow(EntityNotFoundException::new);
+        return movieRepository.findById(movieId).orElseThrow(EntityNotFoundException::new);
     }
 
     public List<Movie> listMovies() {
-        return repository.findAll();
+        return movieRepository.findAll();
     }
 
     public Page<MovieResponse> listMovies(Pageable pageable) {
-        return repository.findAll(pageable).map(MovieResponse::fromEntity);
+        return movieRepository.findAll(pageable).map(MovieResponse::fromEntity);
     }
 
     public MovieResponse getMovie(String movieId) {
         return MovieResponse.fromEntity(findMovieById(movieId));
+    }
+
+    public MovieResponse createMovie(MovieCreateRequest request) {
+        return MovieResponse.fromEntity(movieRepository.save(MovieCreateRequest.toEntity(request, categoryRepository)));
     }
 }

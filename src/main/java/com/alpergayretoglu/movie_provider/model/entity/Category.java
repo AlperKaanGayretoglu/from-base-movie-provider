@@ -3,10 +3,7 @@ package com.alpergayretoglu.movie_provider.model.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,6 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class Category extends BaseEntity {
 
+    @Column(unique = true)
     private String name;
 
     // TODO: Do we need to specify with which table ???
