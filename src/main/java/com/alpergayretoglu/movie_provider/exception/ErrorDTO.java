@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
 
 @AllArgsConstructor
@@ -14,6 +15,7 @@ import java.time.ZonedDateTime;
 public class ErrorDTO {
 
     private ZonedDateTime timestamp;
+    @NotNull
     private int status;
     private String error;
     private String message;

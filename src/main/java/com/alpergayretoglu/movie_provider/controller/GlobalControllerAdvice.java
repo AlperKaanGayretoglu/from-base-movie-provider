@@ -1,10 +1,8 @@
 package com.alpergayretoglu.movie_provider.controller;
 
-import com.alpergayretoglu.movie_provider.exception.BusinessException;
-import com.alpergayretoglu.movie_provider.exception.EntityNotFoundException;
-import com.alpergayretoglu.movie_provider.exception.ErrorCode;
-import com.alpergayretoglu.movie_provider.exception.ErrorDTO;
+import com.alpergayretoglu.movie_provider.exception.*;
 import com.alpergayretoglu.movie_provider.util.DateUtil;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -32,22 +30,29 @@ public class GlobalControllerAdvice extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorDTO> customHandleBusinessException(BusinessException ex, WebRequest request) {
         LOGGER.info("Business Error:");
         ex.printStackTrace();
+
         ErrorDTO error = ErrorDTO.builder()
                 .timestamp(DateUtil.now())
                 .status(ex.getErrorCode().getHttpCode())
                 .error(ex.getErrorCode().toString())
                 .message(ex.getMessage())
                 .build();
-        return new ResponseEntity<>(error, HttpStatus.resolve(error.getStatus()));
+
+        HttpStatus status = HttpStatus.resolve(error.getStatus());
+        return new ResponseEntity<>(error, status != null ? status : HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     // error handle for @Valid
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-                                                                  HttpHeaders headers,
-                                                                  HttpStatus status, WebRequest request) {
+    protected @NotNull ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException ex,
+            @NotNull HttpHeaders headers,
+            @NotNull HttpStatus status,
+            @NotNull WebRequest request
+    ) {
         LOGGER.info("handleMethodArgumentNotValid:");
         ex.printStackTrace();
+
         List<String> errors = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
@@ -67,6 +72,7 @@ public class GlobalControllerAdvice extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorDTO> handleMethodArgumentNotValid(ConstraintViolationException ex, WebRequest request) {
         LOGGER.info("handleMethodArgumentNotValid:");
         ex.printStackTrace();
+
         List<String> errors = ex.getConstraintViolations().stream()
                 .map(ConstraintViolation::getMessage)
                 .collect(Collectors.toList());
@@ -77,15 +83,21 @@ public class GlobalControllerAdvice extends ResponseEntityExceptionHandler {
                 .error(ErrorCode.VALIDATION.name())
                 .message(String.join(", ", errors))
                 .build();
-        return new ResponseEntity<>(error, HttpStatus.resolve(error.getStatus()));
+
+        HttpStatus status = HttpStatus.resolve(error.getStatus());
+        return new ResponseEntity<>(error, status != null ? status : HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Override
-    protected ResponseEntity<Object> handleMissingServletRequestPart(MissingServletRequestPartException ex,
-                                                                     HttpHeaders headers,
-                                                                     HttpStatus status, WebRequest request) {
+    protected @NotNull ResponseEntity<Object> handleMissingServletRequestPart(
+            MissingServletRequestPartException ex,
+            @NotNull HttpHeaders headers,
+            HttpStatus status,
+            @NotNull WebRequest request
+    ) {
         LOGGER.info("handleMissingServletRequestPart:");
         ex.printStackTrace();
+
         ErrorDTO error = ErrorDTO.builder()
                 .timestamp(DateUtil.now())
                 .status(status.value())
@@ -97,25 +109,25 @@ public class GlobalControllerAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Object> handleException(EntityNotFoundException e) {
-        LOGGER.info("handleException:");
+        LOGGER.info("EntityNotFoundException:");
         e.printStackTrace();
+
         return new ResponseEntity<>(e.getMessage(), e.getStatusCode());
     }
 
-    /* TODO: These do not work properly, fix them or remove them
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<Object> handleException(BadRequestException e) {
-        return new ResponseEntity<>(e.getMessage(), e.getStatusCode());
-    }
+        LOGGER.info("BadRequestException:");
+        e.printStackTrace();
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Object> handleException(MethodArgumentNotValidException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(e.getMessage(), e.getStatusCode());
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleException(Exception e) {
+        LOGGER.info("Exception:");
+        e.printStackTrace();
+
         return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
-     */
 }
