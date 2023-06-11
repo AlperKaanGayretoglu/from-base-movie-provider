@@ -3,6 +3,7 @@ package com.alpergayretoglu.movie_provider.controller;
 import com.alpergayretoglu.movie_provider.model.request.auth.ResetPasswordRequest;
 import com.alpergayretoglu.movie_provider.model.request.user.UserCreateRequest;
 import com.alpergayretoglu.movie_provider.model.request.user.UserUpdateRequest;
+import com.alpergayretoglu.movie_provider.model.response.ContractRecordResponse;
 import com.alpergayretoglu.movie_provider.model.response.InvoiceResponse;
 import com.alpergayretoglu.movie_provider.model.response.UserResponse;
 import com.alpergayretoglu.movie_provider.service.AuthenticationService;
@@ -55,8 +56,8 @@ public class UserController {
     }
 
     @PostMapping("/{userId}/subscribe/{subscriptionId}")
-    public void subscribe(@PathVariable String userId, @PathVariable String subscriptionId) {
-        userService.subscribe(userId, subscriptionId);
+    public ContractRecordResponse subscribe(@PathVariable String userId, @PathVariable String subscriptionId) {
+        return ContractRecordResponse.fromEntity(userService.subscribe(userId, subscriptionId));
     }
 
     @ApiPageable
