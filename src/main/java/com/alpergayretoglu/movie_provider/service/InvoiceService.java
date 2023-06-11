@@ -73,4 +73,8 @@ public class InvoiceService {
     public Invoice findById(String id) {
         return repository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
+
+    public Page<InvoiceResponse> listInvoicesForContractRecords(List<ContractRecord> contractRecords, Pageable pageable) {
+        return repository.findAllByContractRecordIn(contractRecords, pageable).map(InvoiceResponse::fromEntity);
+    }
 }

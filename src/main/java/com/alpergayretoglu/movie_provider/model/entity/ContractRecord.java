@@ -3,8 +3,10 @@ package com.alpergayretoglu.movie_provider.model.entity;
 import lombok.*;
 
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -29,9 +31,8 @@ public class ContractRecord extends BaseEntity {
     // TODO: Figure out if this is necessary ???
     // private ZonedDateTime createdDate;
 
-    // TODO: Implement this
-    // @OneToMany
-    // private List<Invoice> invoices;
+    @OneToMany
+    private List<Invoice> invoices;
 
     public int getRemainingDuration() {
         int totalDuration = this.duration;

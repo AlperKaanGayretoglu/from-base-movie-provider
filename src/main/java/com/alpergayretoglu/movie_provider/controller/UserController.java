@@ -3,6 +3,7 @@ package com.alpergayretoglu.movie_provider.controller;
 import com.alpergayretoglu.movie_provider.model.request.auth.ResetPasswordRequest;
 import com.alpergayretoglu.movie_provider.model.request.user.CreateUserRequest;
 import com.alpergayretoglu.movie_provider.model.request.user.UpdateUserRequest;
+import com.alpergayretoglu.movie_provider.model.response.InvoiceResponse;
 import com.alpergayretoglu.movie_provider.model.response.UserResponse;
 import com.alpergayretoglu.movie_provider.service.AuthenticationService;
 import com.alpergayretoglu.movie_provider.service.UserService;
@@ -22,8 +23,8 @@ public class UserController {
     private final UserService userService;
     private final AuthenticationService authenticationService;
 
-    @GetMapping
     @ApiPageable
+    @GetMapping
     public Page<UserResponse> listUsers(@ApiIgnore Pageable pageable) {
         return userService.listUsers(pageable).map(UserResponse::fromEntity);
     }
@@ -53,19 +54,15 @@ public class UserController {
         authenticationService.resetPassword(authenticationService.getAuthenticatedUser(), resetPasswordRequest);
     }
 
-    // TODO: EXTRA METHODS
-    @PostMapping("{userId}/subscribe/{subscriptionId}")
+    @PostMapping("/{userId}/subscribe/{subscriptionId}")
     public void subscribe(@PathVariable String userId, @PathVariable String subscriptionId) {
         userService.subscribe(userId, subscriptionId);
     }
 
-
-    // ADMIN or SELF authorization testing route, TODO: SELF DOESN'T WORK!!! (problem with SelfFilter!!!)
-    /*
-    @GetMapping("/admin-or-self-test/{userId}")
-    public String adminOrSelfResource(@PathVariable String userId) {
-        return "You have reached protected resource.";
+    @ApiPageable
+    @GetMapping("/{userId}/invoice")
+    public Page<InvoiceResponse> listInvoices(@PathVariable String userId, @ApiIgnore Pageable pageable) {
+        return userService.listInvoicesForUser(userId, pageable);
     }
-     */
 
 }

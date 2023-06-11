@@ -7,6 +7,7 @@ import com.alpergayretoglu.movie_provider.model.entity.*;
 import com.alpergayretoglu.movie_provider.model.enums.UserRole;
 import com.alpergayretoglu.movie_provider.model.request.user.CreateUserRequest;
 import com.alpergayretoglu.movie_provider.model.request.user.UpdateUserRequest;
+import com.alpergayretoglu.movie_provider.model.response.InvoiceResponse;
 import com.alpergayretoglu.movie_provider.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -37,7 +38,7 @@ public class UserService {
 
     public User getUser(String userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_MISSING, "User not found"));
+                .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_MISSING, "User not found with id: " + userId));
     }
 
     public User createUser(CreateUserRequest createUserRequest) {
@@ -55,25 +56,23 @@ public class UserService {
 
     public User updateUser(String userId, UpdateUserRequest updateUserRequest) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_MISSING, "User not found"));
+                .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_MISSING, "User not found with id: " + userId));
 
         return userRepository.save(UpdateUserRequest.toEntity(user, updateUserRequest));
     }
 
     public User deleteUser(String userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_MISSING, "User not found"));
+                .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_MISSING, "User not found with id: " + userId));
 
         userRepository.delete(user);
 
         return user;
     }
 
-    // TODO: EXTRA METHODS
-
     public ContractRecord subscribe(String userId, String subscriptionId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_MISSING, "User not found"));
+                .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_MISSING, "User not found with id: " + userId));
         Subscription subscription = subscriptionService.findById(subscriptionId);
 
         // check if user is verified
@@ -93,6 +92,14 @@ public class UserService {
 
         if (contractRecord == null) return contractRecordService.addContract(user, subscription);
         else return contractRecordService.updateContract(contractRecord, subscription);
+    }
+
+
+    public Page<InvoiceResponse> listInvoicesForUser(String userId, Pageable pageable) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_MISSING, "User not found with id: " + userId));
+
+        return contractRecordService.listInvoicesForUser(user, pageable);
     }
 
     // Interests : Follow Categories and Favorite Movies
@@ -118,7 +125,7 @@ public class UserService {
      */
     private User addOrRemoveMovieFromUserFavoriteMovies(String userId, String movieId, boolean isAddition) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_MISSING, "User not found"));
+                .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_MISSING, "User not found with id: " + userId));
         Movie movie = movieService.findMovieById(movieId);
         Set<Movie> movies = user.getFavoriteMovies();
 
@@ -140,7 +147,7 @@ public class UserService {
      */
     private User followHelper(String userId, String categoryId, boolean isFollow) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_MISSING, "User not found"));
+                .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_MISSING, "User not found with id: " + userId));
         Category category = categoryService.findCategoryById(categoryId);
 
         List<Category> categories = user.getFollowedCategories();
