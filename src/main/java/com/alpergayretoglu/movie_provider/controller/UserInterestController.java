@@ -26,6 +26,11 @@ public class UserInterestController {
     // - getFollowedCategories
     // - getFollowedCategory
 
+    @GetMapping("/favorite-movies/{movieId}")
+    public MovieResponse getFavoriteMovie(@PathVariable String userId, @PathVariable String movieId) {
+        return MovieResponse.fromEntity(userService.getFavoriteMovie(userId, movieId));
+    }
+
 
     @PostMapping("/movie/{movieId}/favorite")
     public UserResponse favoriteMovie(@PathVariable String userId, @PathVariable String movieId) {

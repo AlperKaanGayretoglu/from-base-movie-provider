@@ -158,4 +158,15 @@ public class UserService {
         List<Movie> movies = new ArrayList<>(user.getFavoriteMovies());
         return new RestResponsePage<>(movies, pageable, movies.size());
     }
+
+    public Movie getFavoriteMovie(String userId, String movieId) {
+        User user = getUserById(userId);
+        Movie movie = movieService.findMovieById(movieId);
+
+        if (!user.getFavoriteMovies().contains(movie)) {
+            throw new BusinessException(ErrorCode.RESOURCE_MISSING, "Movie not found in favorites");
+        }
+
+        return movie;
+    }
 }
