@@ -1,6 +1,7 @@
 package com.alpergayretoglu.movie_provider.controller;
 
 import com.alpergayretoglu.movie_provider.model.request.subscription.SubscriptionCreateRequest;
+import com.alpergayretoglu.movie_provider.model.request.subscription.SubscriptionUpdateRequest;
 import com.alpergayretoglu.movie_provider.model.response.SubscriptionResponse;
 import com.alpergayretoglu.movie_provider.service.SubscriptionService;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,11 @@ public class SubscriptionController {
     @PostMapping
     public SubscriptionResponse createSubscription(@RequestBody SubscriptionCreateRequest request) {
         return SubscriptionResponse.fromEntity(subscriptionService.createSubscription(request));
+    }
+
+    @PutMapping("{subId}")
+    public SubscriptionResponse updateSubscription(@PathVariable String subId, @RequestBody SubscriptionUpdateRequest request) {
+        return SubscriptionResponse.fromEntity(subscriptionService.updateSubscription(subId, request));
     }
 
 }
