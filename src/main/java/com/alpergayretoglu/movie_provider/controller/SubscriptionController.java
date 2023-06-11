@@ -37,4 +37,9 @@ public class SubscriptionController {
         return SubscriptionResponse.fromEntity(subscriptionService.updateSubscription(subId, request));
     }
 
+    @DeleteMapping("{subId}")
+    public void deleteSubscription(@PathVariable String subId) {
+        subscriptionService.deactivateSubscription(subId);
+    }
+
 }

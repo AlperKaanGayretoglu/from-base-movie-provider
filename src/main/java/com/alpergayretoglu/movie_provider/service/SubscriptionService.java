@@ -42,4 +42,13 @@ public class SubscriptionService {
         Subscription oldSubscription = findById(subId);
         return repository.save(SubscriptionUpdateRequest.updateWith(oldSubscription, request));
     }
+
+    public void deactivateSubscription(String subId) {
+        Subscription subscription = findById(subId);
+        if (!subscription.isActive()) {
+            throw new IllegalArgumentException("Subscription is already inactive");
+        }
+        subscription.setActive(false);
+        repository.save(subscription);
+    }
 }
