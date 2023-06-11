@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ContractRecordRepository extends JpaRepository<ContractRecord, String> {
-    public List<ContractRecord> findAllByUser(User user);
+    List<ContractRecord> findAllByUser(User user);
 }
