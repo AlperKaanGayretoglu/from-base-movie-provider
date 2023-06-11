@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
@@ -21,6 +22,11 @@ public class MovieController {
     @ApiPageable
     public Page<MovieResponse> listMovies(@ApiIgnore Pageable pageable) {
         return movieService.listMovies(pageable);
+    }
+
+    @GetMapping("/{movieId}")
+    public MovieResponse getMovie(@PathVariable String movieId) {
+        return movieService.getMovie(movieId);
     }
 
 }

@@ -33,4 +33,7 @@ public class MovieService {
         return repository.findAll(pageable).map(MovieResponse::fromEntity);
     }
 
+    public MovieResponse getMovie(String movieId) {
+        return MovieResponse.fromEntity(findMovieById(movieId));
+    }
 }
