@@ -1,4 +1,23 @@
-FROM amazoncorretto:17
-COPY target/movie_provider-0.0.1-SNAPSHOT.jar app.jar
+FROM registry.gitlab.com/AlperKaanGayretoglu/from-base-movie-provider/base:latest as builder
+WORKDIR /usr/local/app
+
+COPY ./ ./
+
+RUN mvn \
+    -Dmaven.test.skip=true \
+    --batch-mode \
+    package
+
+
+FROM gcr.io/distroless/java:8
+
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","app.jar"]
+WORKDIR /usr/local/app
+
+COPY --from=builder \
+    /usr/local/app/target/movie_provider*.jar \
+    ./server.jar
+
+COPY ./src/main/resources ./
+
+CMD [ "/usr/local/app/server.jar", "-Djava.security.edg=file:/dev/./urandom", "-Djava.security.egd=file:/dev/./urandom"]
