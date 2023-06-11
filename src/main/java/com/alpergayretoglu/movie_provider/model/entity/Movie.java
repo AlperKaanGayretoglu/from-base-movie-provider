@@ -23,6 +23,7 @@ public class Movie extends BaseEntity {
     private Set<Category> categories = new HashSet<>();
 
     @ManyToMany(mappedBy = "favoriteMovies", fetch = FetchType.LAZY)
+    @Builder.Default
     private Set<User> fans = new HashSet<>();
 
     private String description;
