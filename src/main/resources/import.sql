@@ -22,14 +22,28 @@ VALUES ('66b455da-665a-4dc1-b4f1-b526c1c9ab4e', 6, true, 80, 'DIAMOND', now(), n
 
 -- Category Data
 INSERT INTO category (id, name, parent_id, is_super_category, created, updated)
-VALUES ('10b455da-7e5a-4dc3-b4f5-b526c1c9ab4e', 'SUPER CATEGORY', null, true, now(), now());
+VALUES ('10b455da-7e5a-4dc3-b4f5-b526c1c9ab4e', 'SUPER CATEGORY', null,
+        true, now(), now());
 
 INSERT INTO category (id, name, parent_id, is_super_category, created, updated)
-VALUES ('66403305-972b-42b1-a71a-d7bb2828eebe', 'HORROR', '10b455da-7e5a-4dc3-b4f5-b526c1c9ab4e', false, now(), now());
+VALUES ('66403305-972b-42b1-a71a-d7bb2828eebe', 'HORROR', '10b455da-7e5a-4dc3-b4f5-b526c1c9ab4e',
+        false, now(), now());
 
 INSERT INTO category (id, name, parent_id, is_super_category, created, updated)
-VALUES ('50a5fc87-4cbe-4b50-ac5a-acdd90bbfbf4', 'ACTION', '10b455da-7e5a-4dc3-b4f5-b526c1c9ab4e', false, now(), now());
+VALUES ('50a5fc87-4cbe-4b50-ac5a-acdd90bbfbf4', 'ACTION', '10b455da-7e5a-4dc3-b4f5-b526c1c9ab4e',
+        false, now(), now());
 
+INSERT INTO category (id, name, parent_id, is_super_category, created, updated)
+VALUES ('50a5fc87-4cbe-4b50-ac5a-acdd90bbfbf5', 'COMEDY', '10b455da-7e5a-4dc3-b4f5-b526c1c9ab4e',
+        false, now(), now());
+
+INSERT INTO category (id, name, parent_id, is_super_category, created, updated)
+VALUES ('50a5fc87-4cbe-4b50-ac5a-acdd90bbfbf6', 'ROMANTIC', '10b455da-7e5a-4dc3-b4f5-b526c1c9ab4e',
+        false, now(), now());
+
+INSERT INTO category (id, name, parent_id, is_super_category, created, updated)
+VALUES ('50a5fc87-4cbe-4b50-ac5a-acdd90bbfbf7', 'ROMANTIC COMEDY', '10b455da-7e5a-4dc3-b4f5-b526c1c9ab4e',
+        false, now(), now());
 
 -- Movie Data
 INSERT INTO movie (id, created, updated, title, description, movie_length)
@@ -72,4 +86,9 @@ INSERT INTO users_categories (user_id, categories_id)
 VALUES ('guest', '66403305-972b-42b1-a71a-d7bb2828eebe'); -- guest follows HORROR
 
 INSERT INTO users_categories (user_id, categories_id)
-VALUES ('guest', '50a5fc87-4cbe-4b50-ac5a-acdd90bbfbf4'); -- guest follows ACTION
+VALUES ('guest', '50a5fc87-4cbe-4b50-ac5a-acdd90bbfbf4');
+-- guest follows ACTION
+
+-- File Data
+INSERT INTO file_data (id, created, updated, name, content, file_type, byte_size)
+VALUES ('b4dceb23-d2ea-4432-aa7a-c71b4b15bcee', now(), now(), 'hello.txt', 'HELLO', 0, 5);
