@@ -1,15 +1,11 @@
-INSERT INTO users (id, created, updated, email, name, password_hash, recovery_code, recovery_code_expiration_date,
-                   surname, role, verification_code, verification_code_expiration_date, is_verified)
-VALUES ('user1', now(), now(), 'test@test.com', 'John', '$2a$10$aqvJCH43/2Nt1JmoT5nn5OrnFt05VtjE87lI/xw7mnoSKO.NejYfW',
-        null, null, 'Doe', 'ADMIN', null, null, true);
-
 -- User Data (admin pass is 123456789)
-INSERT INTO users (id, email, name, surname, password_hash, role, is_verified, created, updated)
-VALUES ('5b8a3d25-2b7a-4683-89ed-ac0e42cdc879', 'alperkaangayretoglu@gmail.com', 'Alper', 'Gayretoğlu',
-        '$2a$10$OU9/JC80FudcjfuAj1.X5OopuhG6Trs3JHQEOHdH.Xnm7VSIpW0OC', 'ADMIN', true, now(), now());
+INSERT INTO users (id, created, updated, email, password_hash, recovery_code, recovery_code_expiration_date,
+                   name, surname, role, verification_code, verification_code_expiration_date, is_verified)
+VALUES ('admin', now(), now(), 'admin@mail.com', '$2a$10$OU9/JC80FudcjfuAj1.X5OopuhG6Trs3JHQEOHdH.Xnm7VSIpW0OC',
+        null, null, 'ADMIN', 'ADMIN', 'ADMIN', null, null, true);
 
 INSERT INTO users (id, email, name, surname, password_hash, role, is_verified, created, updated)
-VALUES ('6b8a3d25-2b7a-4683-89ed-ac0e42cdc878', 'guest@mail.com', 'Guest', 'Guest',
+VALUES ('guest', 'guest@mail.com', 'GUEST', 'GUEST',
         '$2a$10$OU9/JC80FudcjfuAj1.X5OopuhG6Trs3JHQEOHdH.Xnm7VSIpW0OC', 'GUEST', true, now(), now());
 
 -- Subscription Data
