@@ -55,6 +55,9 @@ VALUES ('cbf27a05-9abe-40c0-a943-ede62f9ca3de', now(), now(), 'John Wick', 'desc
 INSERT INTO movie (id, created, updated, title, description, movie_length)
 VALUES ('421450be-91e2-4184-8450-3dcc12a33e63', now(), now(), 'Matrix', 'description', 60);
 
+INSERT INTO movie (id, created, updated, title, description, movie_length)
+VALUES ('421450be-91e2-4184-8450-3dcc12a33e64', now(), now(), 'Matrix 2', 'description', 60);
+
 
 -- category_movies join table
 INSERT INTO category_movies (categories_id, movies_id)
