@@ -2,6 +2,7 @@ package com.alpergayretoglu.movie_provider.service;
 
 import com.alpergayretoglu.movie_provider.exception.EntityNotFoundException;
 import com.alpergayretoglu.movie_provider.model.entity.Subscription;
+import com.alpergayretoglu.movie_provider.model.request.subscription.SubscriptionCreateRequest;
 import com.alpergayretoglu.movie_provider.model.response.SubscriptionResponse;
 import com.alpergayretoglu.movie_provider.repository.SubscriptionRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,5 +31,9 @@ public class SubscriptionService {
 
     public SubscriptionResponse getSubscription(String subId) {
         return SubscriptionResponse.fromEntity(findById(subId));
+    }
+
+    public Subscription createSubscription(SubscriptionCreateRequest request) {
+        return repository.save(SubscriptionCreateRequest.toEntity(request));
     }
 }
