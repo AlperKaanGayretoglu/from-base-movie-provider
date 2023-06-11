@@ -1,12 +1,13 @@
 -- User Data (admin pass is 123456789)
-INSERT INTO users (id, created, updated, email, password_hash, recovery_code, recovery_code_expiration_date,
-                   name, surname, role, verification_code, verification_code_expiration_date, is_verified)
+INSERT INTO users (id, created, updated, email, password_hash, name, surname, role,
+                   recovery_code, recovery_code_expiration_date,
+                   verification_code, verification_code_expiration_date, is_verified)
 VALUES ('admin', now(), now(), 'admin@mail.com', '$2a$10$OU9/JC80FudcjfuAj1.X5OopuhG6Trs3JHQEOHdH.Xnm7VSIpW0OC',
-        null, null, 'ADMIN', 'ADMIN', 'ADMIN', null, null, true);
+        'ADMIN', 'ADMIN', 'ADMIN', null, null, null, null, true);
 
-INSERT INTO users (id, email, name, surname, password_hash, role, is_verified, created, updated)
-VALUES ('guest', 'guest@mail.com', 'GUEST', 'GUEST',
-        '$2a$10$OU9/JC80FudcjfuAj1.X5OopuhG6Trs3JHQEOHdH.Xnm7VSIpW0OC', 'GUEST', true, now(), now());
+INSERT INTO users (id, created, updated, email, password_hash, name, surname, role, is_verified)
+VALUES ('guest', now(), now(), 'guest@mail.com', '$2a$10$OU9/JC80FudcjfuAj1.X5OopuhG6Trs3JHQEOHdH.Xnm7VSIpW0OC',
+        'GUEST', 'GUEST', 'GUEST', true);
 
 -- Subscription Data
 INSERT INTO subscription (id, duration, is_active, monthly_fee, name, created, updated)
@@ -31,14 +32,14 @@ VALUES ('50a5fc87-4cbe-4b50-ac5a-acdd90bbfbf4', 'ACTION', '10b455da-7e5a-4dc3-b4
 
 
 -- Movie Data
-INSERT INTO movie (id, title, created, updated)
-VALUES ('b4dceb23-d2ea-4432-aa7a-c71b4b15bcee', 'The Walking Dead', now(), now());
+INSERT INTO movie (id, created, updated, title, description, movie_length)
+VALUES ('b4dceb23-d2ea-4432-aa7a-c71b4b15bcee', now(), now(), 'The Walking Dead', 'description', 60);
 
-INSERT INTO movie (id, title, created, updated)
-VALUES ('cbf27a05-9abe-40c0-a943-ede62f9ca3de', 'John Wick', now(), now());
+INSERT INTO movie (id, created, updated, title, description, movie_length)
+VALUES ('cbf27a05-9abe-40c0-a943-ede62f9ca3de', now(), now(), 'John Wick', 'description', 60);
 
-INSERT INTO movie (id, title, created, updated)
-VALUES ('421450be-91e2-4184-8450-3dcc12a33e63', 'Matrix', now(), now());
+INSERT INTO movie (id, created, updated, title, description, movie_length)
+VALUES ('421450be-91e2-4184-8450-3dcc12a33e63', now(), now(), 'Matrix', 'description', 60);
 
 
 -- category_movies join table
@@ -59,17 +60,16 @@ VALUES ('66403305-972b-42b1-a71a-d7bb2828eebe', 'b4dceb23-d2ea-4432-aa7a-c71b4b1
 
 -- User Interest : favorite movies : users_movies join table
 INSERT INTO users_movies (user_id, movie_id)
-VALUES ('5b8a3d25-2b7a-4683-89ed-ac0e42cdc879',
-        'b4dceb23-d2ea-4432-aa7a-c71b4b15bcee'); -- admin favorite The Walking Dead
+VALUES ('guest', 'b4dceb23-d2ea-4432-aa7a-c71b4b15bcee'); -- guest favorites The Walking Dead
 
 INSERT INTO users_movies (user_id, movie_id)
-VALUES ('5b8a3d25-2b7a-4683-89ed-ac0e42cdc879', 'cbf27a05-9abe-40c0-a943-ede62f9ca3de');
--- admin favorites nfs mw
+VALUES ('guest', 'cbf27a05-9abe-40c0-a943-ede62f9ca3de');
+-- guest favorites John Wick
 
 
 -- User Interest : following categories : users_categories join table
 INSERT INTO users_categories (user_id, categories_id)
-VALUES ('5b8a3d25-2b7a-4683-89ed-ac0e42cdc879', '66403305-972b-42b1-a71a-d7bb2828eebe'); -- admin follows HORROR
+VALUES ('guest', '66403305-972b-42b1-a71a-d7bb2828eebe'); -- guest follows HORROR
 
 INSERT INTO users_categories (user_id, categories_id)
-VALUES ('5b8a3d25-2b7a-4683-89ed-ac0e42cdc879', '50a5fc87-4cbe-4b50-ac5a-acdd90bbfbf4'); -- admin follows ACTION
+VALUES ('guest', '50a5fc87-4cbe-4b50-ac5a-acdd90bbfbf4'); -- guest follows ACTION
