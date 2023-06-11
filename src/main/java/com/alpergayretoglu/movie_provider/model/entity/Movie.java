@@ -1,6 +1,5 @@
 package com.alpergayretoglu.movie_provider.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.Entity;
@@ -20,13 +19,11 @@ public class Movie extends BaseEntity {
     private String title;
 
     @ManyToMany(mappedBy = "movies", fetch = FetchType.LAZY)
-    @JsonIgnoreProperties("movies")
     @Builder.Default
     private Set<Category> categories = new HashSet<>();
 
-    // TODO: Implement this
-//    @ManyToMany(mappedBy = "movies", fetch = FetchType.LAZY)
-//    private Set<User> fans = new HashSet<>();
+    @ManyToMany(mappedBy = "favoriteMovies", fetch = FetchType.LAZY)
+    private Set<User> fans = new HashSet<>();
 
     private String description;
 
