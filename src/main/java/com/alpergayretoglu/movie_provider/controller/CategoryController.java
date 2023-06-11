@@ -20,7 +20,7 @@ public class CategoryController {
     @GetMapping
     @ApiPageable
     public Page<CategoryResponse> listCategories(@ApiIgnore Pageable pageable) {
-        return categoryService.listCategories(pageable);
+        return categoryService.listCategories(pageable).map(CategoryResponse::fromEntity);
     }
 
     @PostMapping("{parentId}")

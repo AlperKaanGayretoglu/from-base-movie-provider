@@ -19,7 +19,7 @@ public class SubscriptionController {
     @ApiPageable
     @GetMapping
     public Page<SubscriptionResponse> listSubscriptions(@ApiIgnore Pageable pageable) {
-        return subscriptionService.listSubscriptions(pageable);
+        return subscriptionService.listSubscriptions(pageable).map(SubscriptionResponse::fromEntity);
     }
 
     @GetMapping("{subId}")

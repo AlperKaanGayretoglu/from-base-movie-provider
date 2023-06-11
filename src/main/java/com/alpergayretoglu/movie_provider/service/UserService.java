@@ -33,7 +33,6 @@ public class UserService {
     private final ContractRecordService contractRecordService;
     private final PasswordEncoder passwordEncoder;
 
-    // TODO: DEFAULT METHODS
     public Page<User> listUsers(Pageable pageable) {
         return userRepository.findAll(pageable);
     }

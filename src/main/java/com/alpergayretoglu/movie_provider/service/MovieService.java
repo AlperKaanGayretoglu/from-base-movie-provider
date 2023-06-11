@@ -12,8 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @AllArgsConstructor
 public class MovieService {
@@ -29,12 +27,8 @@ public class MovieService {
         return movieRepository.findById(movieId).orElseThrow(EntityNotFoundException::new);
     }
 
-    public List<Movie> listMovies() {
-        return movieRepository.findAll();
-    }
-
-    public Page<MovieResponse> listMovies(Pageable pageable) {
-        return movieRepository.findAll(pageable).map(MovieResponse::fromEntity);
+    public Page<Movie> listMovies(Pageable pageable) {
+        return movieRepository.findAll(pageable);
     }
 
     public MovieResponse getMovie(String movieId) {

@@ -20,7 +20,7 @@ public class InvoiceController {
     @GetMapping
     @ApiPageable
     public Page<InvoiceResponse> listInvoices(@ApiIgnore Pageable pageable) {
-        return invoiceService.listInvoices(pageable);
+        return invoiceService.listInvoices(pageable).map(InvoiceResponse::fromEntity);
     }
 
     @GetMapping("{id}")

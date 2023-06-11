@@ -3,15 +3,12 @@ package com.alpergayretoglu.movie_provider.service;
 import com.alpergayretoglu.movie_provider.exception.EntityNotFoundException;
 import com.alpergayretoglu.movie_provider.model.entity.Category;
 import com.alpergayretoglu.movie_provider.model.request.category.CategoryUpdateRequest;
-import com.alpergayretoglu.movie_provider.model.response.CategoryResponse;
 import com.alpergayretoglu.movie_provider.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -34,12 +31,8 @@ public class CategoryService {
         return repository.save(category);
     }
 
-    public List<Category> listCategories() {
-        return repository.findAll();
-    }
-
-    public Page<CategoryResponse> listCategories(Pageable pageable) {
-        return repository.findAll(pageable).map(CategoryResponse::fromEntity);
+    public Page<Category> listCategories(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
     public Category findCategoryById(String categoryId) {

@@ -17,10 +17,10 @@ public class MovieController {
 
     private final MovieService movieService;
 
-    @GetMapping
     @ApiPageable
+    @GetMapping
     public Page<MovieResponse> listMovies(@ApiIgnore Pageable pageable) {
-        return movieService.listMovies(pageable);
+        return movieService.listMovies(pageable).map(MovieResponse::fromEntity);
     }
 
     @GetMapping("/{movieId}")

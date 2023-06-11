@@ -21,12 +21,8 @@ public class InvoiceService {
     private final InvoiceRepository repository;
     private final PaymentService paymentService;
 
-    public List<Invoice> listInvoices() {
-        return repository.findAll();
-    }
-
-    public Page<InvoiceResponse> listInvoices(Pageable pageable) {
-        return repository.findAll(pageable).map(InvoiceResponse::fromEntity);
+    public Page<Invoice> listInvoices(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
     @Transactional
